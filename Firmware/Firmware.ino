@@ -543,7 +543,7 @@ void setup(void) {
   {
     pinMode(digitalInPinList[i], INPUT);
   }
-  Serial.begin(250000);
+  Serial.begin(115200);
   while (!Serial) {}
   Serial.println(F("Initial setup\n"));
 
