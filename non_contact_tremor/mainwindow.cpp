@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "settingsdialog.h"
+#include "trialsetup.h"
 
 #include <QMessageBox>
 #include <QLabel>
@@ -16,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     serial = new QSerialPort(this);
 
     settings = new SettingsDialog;
+    trialSetup = new TrialSetup;
 
     ui->actionConnect->setEnabled(true);
     ui->actionDisconnect->setEnabled(false);
@@ -36,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete settings;
+    delete trialSetup;
     delete ui;
     // Check if need to close serial here
 }
@@ -109,6 +112,7 @@ void MainWindow::initActionsConnections()
     connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(closeSerialPort()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionConfigure, SIGNAL(triggered()), settings, SLOT(show()));
+    connect(ui->actionTrialSetup, SIGNAL(triggered()), trialSetup, SLOT(show()));
     //connect(ui->actionClear, SIGNAL(triggered()), console, SLOT(clear()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));

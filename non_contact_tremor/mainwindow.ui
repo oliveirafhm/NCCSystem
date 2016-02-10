@@ -52,7 +52,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionPatient"/>
-    <addaction name="actionSetup"/>
+    <addaction name="actionTrialSetup"/>
     <addaction name="separator"/>
     <addaction name="actionConfigure"/>
     <addaction name="separator"/>
@@ -77,7 +77,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionPatient"/>
-   <addaction name="actionSetup"/>
+   <addaction name="actionTrialSetup"/>
    <addaction name="separator"/>
    <addaction name="actionConnect"/>
    <addaction name="actionDisconnect"/>
@@ -144,16 +144,16 @@
     <string>Edit patient data</string>
    </property>
   </action>
-  <action name="actionSetup">
+  <action name="actionTrialSetup">
    <property name="icon">
     <iconset resource="non_contact_tremor.qrc">
      <normaloff>:/images/setup2.png</normaloff>:/images/setup2.png</iconset>
    </property>
    <property name="text">
-    <string>Setup</string>
+    <string>Trial Setup</string>
    </property>
    <property name="toolTip">
-    <string>Experiment setup</string>
+    <string>Trial setup</string>
    </property>
   </action>
   <action name="actionClear">

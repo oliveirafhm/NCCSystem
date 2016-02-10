@@ -11,6 +11,7 @@ class MainWindow;
 }
 
 class SettingsDialog;
+class TrialSetup;
 
 class MainWindow : public QMainWindow
 {
@@ -36,6 +37,7 @@ private:
     Ui::MainWindow *ui;
     QLabel *status;
     SettingsDialog *settings;
+    TrialSetup *trialSetup;
     QSerialPort *serial;
 };
 

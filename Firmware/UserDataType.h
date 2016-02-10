@@ -7,7 +7,7 @@ const uint8_t digitalInPinList[] = {8,9};
 const uint8_t ADC_DIM = sizeof(analogInPinList)/sizeof(uint8_t);
 const uint8_t DIGITAL_DIM = sizeof(digitalInPinList)/sizeof(uint8_t);
 bool binaryToCsvFlag = false;
-// Analogic out , Digital out , Digital out
+// Output pins: Analogic out , Digital out , Digital out
 const uint8_t outputPinList[] = {DAC0,6,7};
 bool outputSignal[] = {false, false, false};
 //const uint8_t redLedPin = 2;// The same as ERROR_LED_PIN

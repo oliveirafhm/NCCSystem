@@ -546,49 +546,102 @@ void setup(void) {
   Serial.begin(115200);
   while (!Serial) {}
   Serial.println(F("Initial setup\n"));
-
-  // Output signal configuration
-  Serial.println(F("Would you like to output a sync signal?"));
-  Serial.println(F("a - Analog output signal"));
-  Serial.println(F("b - Digital output signal A"));
-  Serial.println(F("c - Digital output signal B"));
-  Serial.println(F("s - Skip"));
+  Serial.println(F("Waiting for setup parameters, please use the follow format (without spaces):\n"));
+  //|on or off using binary digit|integer value to represent sample rate|#
+  Serial.println(F("| output signal (3 bytes) | sample rate (integer value up to 4000 Hz) |#\n"));
   Serial.println();
-  while(!Serial.available()) {}
-  char c = tolower(Serial.read());
-  // Discard extra Serial data.
-  do {
-    delay(10);
-  } while (Serial.read() >= 0);
 
-  if (c == 'a') {
-    outputSignal[0] = true;
-    Serial.println(F("- Analog output pulse turned on (Pin 3 - DB9M)\n"));
-  } else if (c == 'b') {
-    outputSignal[1] = true;
-    pinMode(outputPinList[1], OUTPUT);
-    digitalWrite(outputPinList[1], LOW);
-    Serial.println(F("- Digital output pulse turned on (Pin 7 - DB9F)\n"));
-  } else if (c == 'c') {
-    outputSignal[2] = true;
-    pinMode(outputPinList[2], OUTPUT);
-    digitalWrite(outputPinList[2], LOW);
-    Serial.println(F("- Digital output pulse turned on (Pin 5 - DB9F)\n"));
-  } else{
-    Serial.println(F("- Skipped\n"));
-  }
-  // End of output signal configuration
-
-  Serial.print(F("Type the sample rate (default is "));
-  Serial.print(sampleRate);
-  Serial.println(F("Hz):"));
   while(!Serial.available()) {}
-  while(Serial.available() > 0) {
-    sampleRate = Serial.parseInt();
-    LOG_INTERVAL_USEC = (1/sampleRate)*1000000;
-    Serial.println(sampleRate);
-    Serial.println(LOG_INTERVAL_USEC);
+  const uint8_t setupLength = 11;
+  char setupBuffer[setupLength];
+  Serial.readBytesUntil('#', setupBuffer, setupLength);
+  Serial.println(setupBuffer);
+  Serial.println();
+
+  char sampleRateBuffer[4];
+  for(uint8_t i = 0; i < setupLength; i++){
+    if(setupBuffer[i] == '|'){
+      continue;
+    }
+    // Output signal configuration
+    if(i == 1 && setupBuffer[i] == '1' && setupBuffer[i-1] == '|'){
+      outputSignal[0] = true;
+      Serial.println(F("- Analog output pulse turned on (Pin 3 - DB9M)\n"));
+    }else if(i == 2 && setupBuffer[i] == '1' && setupBuffer[i-2] == '|'){
+      outputSignal[1] = true;
+      pinMode(outputPinList[1], OUTPUT);
+      digitalWrite(outputPinList[1], LOW);
+      Serial.println(F("- Digital output pulse turned on (Pin 7 - DB9F)\n"));
+    }else if(i == 3 && setupBuffer[i] == '1' && setupBuffer[i-3] == '|'){
+      outputSignal[2] = true;
+      pinMode(outputPinList[2], OUTPUT);
+      digitalWrite(outputPinList[2], LOW);
+      Serial.println(F("- Digital output pulse turned on (Pin 5 - DB9F)\n"));
+    }
+    // End of output signal configuration
+    // Sample rate configuration
+    else if(i > 4){
+      sampleRateBuffer[i-5] = setupBuffer[i];
+    }
   }
+  sampleRate = atof(sampleRateBuffer);
+  if (sampleRate == 0){
+      sampleRate = 200;
+  }
+  LOG_INTERVAL_USEC = (1/sampleRate)*1000000;
+  Serial.println();
+  Serial.println(sampleRate);
+  Serial.println(LOG_INTERVAL_USEC);
+  // End of sample rate configuration
+
+  // // Output signal configuration
+  // Serial.println(F("Would you like to output a sync signal? (you may choose more than one option - just type ac, for example.)"));
+  // Serial.println(F("a - Analog output signal"));
+  // Serial.println(F("b - Digital output signal A"));
+  // Serial.println(F("c - Digital output signal B"));
+  // Serial.println(F("s - Skip"));
+  // Serial.println();
+  // while(!Serial.available()) {}
+  // char c = tolower(Serial.read());
+  // // Discard extra Serial data.
+  // do {
+  //   delay(10);
+  // } while (Serial.read() >= 0);
+  //
+  // if (c == 'a') {
+  //   outputSignal[0] = true;
+  //   Serial.println(F("- Analog output pulse turned on (Pin 3 - DB9M)\n"));
+  // } else if (c == 'b') {
+  //   outputSignal[1] = true;
+  //   pinMode(outputPinList[1], OUTPUT);
+  //   digitalWrite(outputPinList[1], LOW);
+  //   Serial.println(F("- Digital output pulse turned on (Pin 7 - DB9F)\n"));
+  // } else if (c == 'c') {
+  //   outputSignal[2] = true;
+  //   pinMode(outputPinList[2], OUTPUT);
+  //   digitalWrite(outputPinList[2], LOW);
+  //   Serial.println(F("- Digital output pulse turned on (Pin 5 - DB9F)\n"));
+  // } else{
+  //   Serial.println(F("- Skipped\n"));
+  // }
+  // // End of output signal configuration
+  //
+  // // Sample rate configuration
+  // Serial.print(F("Type the sample rate (default is "));
+  // Serial.print(sampleRate);
+  // Serial.println(F("Hz):"));
+  // while(!Serial.available()) {}
+  // while(Serial.available() > 0) {
+  //   sampleRate = Serial.parseInt();
+  //   if (sampleRate == 0){
+  //     sampleRate = 200;
+  //   }
+  //   LOG_INTERVAL_USEC = (1/sampleRate)*1000000;
+  //   Serial.println();
+  //   Serial.println(sampleRate);
+  //   Serial.println(LOG_INTERVAL_USEC);
+  // }
+  // // End of sample rate configuration
 
   Serial.print(F("\nFreeRam: "));
   Serial.println(FreeRam());
@@ -611,38 +664,7 @@ void loop(void) {
     Serial.println();
     binaryToCsv();// Convert .bin file to .csv
   }
-  // Output signal configuration
-  /*Serial.println();
-  Serial.println(F("Would you like to output a sync signal?"));
-  Serial.println(F("a - Analog output signal"));
-  Serial.println(F("b - Digital output signal A"));
-  Serial.println(F("c - Digital output signal B"));
-  Serial.println(F("s - Skip"));
-  Serial.println();
-  while(!Serial.available()) {}
-  char c = tolower(Serial.read());
-  // Discard extra Serial data.
-  do {
-    delay(10);
-  } while (Serial.read() >= 0);
-  if (c == 'a') {
-    outputSignal[0] = true;
-    Serial.println(F("- Analog output pulse turned on (Pin 3 - DB9M)"));
-  } else if (c == 'b') {
-    outputSignal[1] = true;
-    pinMode(outputPinList[1], OUTPUT);
-    digitalWrite(outputPinList[1], LOW);
-    Serial.println(F("- Digital output pulse turned on (Pin 7 - DB9F)"));
-  } else if (c == 'c') {
-    outputSignal[2] = true;
-    pinMode(outputPinList[2], OUTPUT);
-    digitalWrite(outputPinList[2], LOW);
-    Serial.println(F("- Digital output pulse turned on (Pin 5 - DB9F)"));
-  } else{
-    Serial.println(F("- Skipped"));
-  }
-  // End of output signal configuration
-  */
+
   Serial.println();
   Serial.println(F("Loop menu - type:"));
   Serial.println(F("d - dump data to Serial"));
