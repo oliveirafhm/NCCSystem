@@ -31,6 +31,9 @@ public:
 
     TrialSetupConfig trialSetupConfig() const;
 
+public slots:
+    void show();
+
 private slots:
     void on_chooseDirectoryButton_clicked();
     void apply();

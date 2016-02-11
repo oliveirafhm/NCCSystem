@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Settings</string>
+   <string>Serial port settings</string>
   </property>
   <property name="modal">
    <bool>false</bool>

@@ -40,11 +40,11 @@ MainWindow::~MainWindow()
     delete settings;
     delete trialSetup;
     delete ui;
-    // Check if need to close serial here
+    // Check if i need to close serial here
 }
 
 void MainWindow::openSerialPort()
-{
+{    
     SettingsDialog::Settings p = settings->settings();
     serial->setPortName(p.name);
     serial->setBaudRate(p.baudRate);
@@ -61,6 +61,13 @@ void MainWindow::openSerialPort()
                           .arg(p.stringDataBits)
                           .arg(p.stringParity).arg(p.stringStopBits)
                           .arg(p.stringFlowControl));
+
+        TrialSetup::TrialSetupConfig ts = trialSetup->trialSetupConfig();
+        QByteArray arduinoSetup;
+        QTextStream(&arduinoSetup) << "|" << ts.outputSignal[0] << ts.outputSignal[1]
+                                   << ts.outputSignal[2] << "|" << ts.sampleRate << "|#";
+        writeData(arduinoSetup);
+
     } else {
         QMessageBox::critical(this, tr("Error"), serial->errorString());
         showStatusMessage(tr("Open serial port error"));

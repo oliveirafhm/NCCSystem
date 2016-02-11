@@ -15,12 +15,22 @@ TrialSetup::TrialSetup(QWidget *parent) :
 
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(apply()));
 
-    fillUI();
 }
 
 TrialSetup::~TrialSetup()
 {
     delete ui;
+}
+
+TrialSetup::TrialSetupConfig TrialSetup::trialSetupConfig() const
+{
+    return currentTrialSetup;
+}
+
+void TrialSetup::show()
+{
+    fillUI();
+    QWidget::show();
 }
 
 void TrialSetup::on_chooseDirectoryButton_clicked()
@@ -34,11 +44,6 @@ void TrialSetup::on_chooseDirectoryButton_clicked()
     ui->directoryPathLineEdit->setText(directoryPath);
 }
 
-TrialSetup::TrialSetupConfig TrialSetup::trialSetupConfig() const
-{
-    return currentTrialSetup;
-}
-
 void TrialSetup::apply()
 {
     updateTrialSetupConfig();
@@ -48,7 +53,13 @@ void TrialSetup::apply()
 
 void TrialSetup::updateTrialSetupConfig()
 {
-    qDebug() << "update called!";
+    //qDebug() << "update called!";
+    currentTrialSetup.outputSignal[0] = static_cast<quint8>(ui->analogOutSignalCheckBox->isChecked());
+    currentTrialSetup.outputSignal[1] = static_cast<quint8>(ui->digitalOutSignalACheckBox->isChecked());
+    currentTrialSetup.outputSignal[2] = static_cast<quint8>(ui->digitalOutSignalBCheckBox->isChecked());
+    currentTrialSetup.sampleRate = ui->sampleRateLineEdit->text().toInt();
+    currentTrialSetup.collectionTimeOut = ui->collectionTimeoutLineEdit->text().toInt();
+    currentTrialSetup.directoryPath = ui->directoryPathLineEdit->text();
 }
 
 void TrialSetup::fillUI()
