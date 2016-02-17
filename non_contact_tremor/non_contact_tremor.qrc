@@ -1,15 +1,15 @@
 <RCC>
     <qresource prefix="/">
-        <file>images/connect.png</file>
-        <file>images/disconnect.png</file>
-        <file>images/application-exit.png</file>
-        <file>images/settings.png</file>
-        <file>images/clear.png</file>
-        <file>images/user.png</file>
-        <file>images/setup.png</file>
-        <file>images/setup1.png</file>
-        <file>images/setup2.png</file>
         <file>images/matrix-hand.png</file>
         <file>images/palm1.png</file>
+        <file>images/close.png</file>
+        <file>images/patient-profile.png</file>
+        <file>images/system-controller.png</file>
+        <file>images/trash.png</file>
+        <file>images/usb-connect.png</file>
+        <file>images/usb-disconnect.png</file>
+        <file>images/usb-settings.png</file>
+        <file>images/play.png</file>
+        <file>images/stop.png</file>
     </qresource>
 </RCC>

@@ -16,17 +16,17 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     trialsetup.cpp \
     settingsdialog.cpp \
-    patientdata.cpp
+    patient.cpp
 
 HEADERS  += mainwindow.h \
     trialsetup.h \
     settingsdialog.h \
-    patientdata.h
+    patient.h
 
 FORMS    += mainwindow.ui \
     trialsetup.ui \
     settingsdialog.ui \
-    patientdata.ui
+    patient.ui
 
 RESOURCES += \
     non_contact_tremor.qrc

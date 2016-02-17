@@ -2,11 +2,13 @@
 #include "ui_mainwindow.h"
 #include "settingsdialog.h"
 #include "trialsetup.h"
+#include "patient.h"
 
 #include <QMessageBox>
 #include <QLabel>
 #include <QSerialPort>
 #include <QDebug>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,11 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     settings = new SettingsDialog;
     trialSetup = new TrialSetup;
+    patient = new Patient;
 
     ui->actionConnect->setEnabled(true);
     ui->actionDisconnect->setEnabled(false);
     ui->actionQuit->setEnabled(true);
     ui->actionConfigure->setEnabled(true);
+    ui->actionStart->setEnabled(false);
+    ui->actionStop->setEnabled(false);
 
     status = new QLabel;
     ui->statusBar->addWidget(status);
@@ -39,6 +44,7 @@ MainWindow::~MainWindow()
 {
     delete settings;
     delete trialSetup;
+    delete patient;
     delete ui;
     // Check if i need to close serial here
 }
@@ -53,6 +59,7 @@ void MainWindow::openSerialPort()
     serial->setStopBits(p.stopBits);
     serial->setFlowControl(p.flowControl);
     if (serial->open(QIODevice::ReadWrite)) {
+        serial->clear();
         ui->actionConnect->setEnabled(false);
         ui->actionDisconnect->setEnabled(true);
         ui->actionConfigure->setEnabled(false);
@@ -61,12 +68,10 @@ void MainWindow::openSerialPort()
                           .arg(p.stringDataBits)
                           .arg(p.stringParity).arg(p.stringStopBits)
                           .arg(p.stringFlowControl));
-
-        TrialSetup::TrialSetupConfig ts = trialSetup->trialSetupConfig();
-        QByteArray arduinoSetup;
-        QTextStream(&arduinoSetup) << "|" << ts.outputSignal[0] << ts.outputSignal[1]
-                                   << ts.outputSignal[2] << "|" << ts.sampleRate << "|#";
-        writeData(arduinoSetup);
+        if (serial->isWritable()){
+            QTimer::singleShot(1500,this,SLOT(initialFirmwareSetup()));
+            ui->actionStart->setEnabled(true);
+        }else qDebug() << "Serial is not writable yet!";
 
     } else {
         QMessageBox::critical(this, tr("Error"), serial->errorString());
@@ -94,15 +99,43 @@ void MainWindow::about()
 
 void MainWindow::writeData(const QByteArray &data)
 {
-    serial->write(data);
+    qint64 w = serial->write(data);//, qstrlen(data));
+    serial->flush();
 }
 
 void MainWindow::readData()
 {
-//    QByteArray data = serial->readAll();
-    QByteArray data = serial->readLine();
-    qDebug() << data;
+    //    QByteArray data = serial->readAll();
+    while(serial->canReadLine()){
+        QByteArray data = serial->readLine();
+        qDebug() << data.data();
+    }
     //Save received data at this point
+}
+
+void MainWindow::initialFirmwareSetup()
+{
+    TrialSetup::TrialSetupConfig ts = trialSetup->trialSetupConfig();
+    QByteArray arduinoSetup;
+    QTextStream(&arduinoSetup) << "|" << ts.outputSignal[0] << ts.outputSignal[1]
+                               << ts.outputSignal[2] << "|" << ts.sampleRate << "|#" << endl;
+    writeData(arduinoSetup);
+}
+
+void MainWindow::startDataCollection()
+{
+    QByteArray ba = "r";
+    writeData(ba);
+    ui->actionStart->setEnabled(false);
+    ui->actionStop->setEnabled(true);
+    showStatusMessage(tr("Data collection started"));
+}
+
+void MainWindow::stopDataCollection()
+{
+    QByteArray ba = "2";
+    writeData(ba);
+    showStatusMessage(tr("Stop in progress"));
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
@@ -120,6 +153,9 @@ void MainWindow::initActionsConnections()
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
     connect(ui->actionConfigure, SIGNAL(triggered()), settings, SLOT(show()));
     connect(ui->actionTrialSetup, SIGNAL(triggered()), trialSetup, SLOT(show()));
+    connect(ui->actionPatient, SIGNAL(triggered()), patient, SLOT(show()));
+    connect(ui->actionStart, SIGNAL(triggered()), this, SLOT(startDataCollection()));
+    connect(ui->actionStop, SIGNAL(triggered()), this, SLOT(stopDataCollection()));
     //connect(ui->actionClear, SIGNAL(triggered()), console, SLOT(clear()));
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));

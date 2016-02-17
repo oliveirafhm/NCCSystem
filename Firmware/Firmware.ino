@@ -544,19 +544,21 @@ void setup(void) {
     pinMode(digitalInPinList[i], INPUT);
   }
   Serial.begin(115200);
+  //Serial.setTimeout(2000);//Test
   while (!Serial) {}
-  Serial.println(F("Initial setup\n"));
-  Serial.println(F("Waiting for setup parameters, please use the follow format (without spaces):\n"));
-  //|on or off using binary digit|integer value to represent sample rate|#
-  Serial.println(F("| output signal (3 bytes) | sample rate (integer value up to 4000 Hz) |#\n"));
-  Serial.println();
+  Serial.println("Ready");
+  // Serial.println(F("Initial setup\n"));
+  // Serial.println(F("Waiting for setup parameters, please use the follow format (without spaces):\n"));
+  // //|on or off using binary digit|integer value to represent sample rate|#
+  // Serial.println(F("| output signal (3 bytes) | sample rate (integer value up to 4000 Hz) |#\n"));
+  // Serial.println();
 
   while(!Serial.available()) {}
   const uint8_t setupLength = 11;
   char setupBuffer[setupLength];
   Serial.readBytesUntil('#', setupBuffer, setupLength);
-  Serial.println(setupBuffer);
-  Serial.println();
+  //Serial.println(setupBuffer);
+  //Serial.println("ok2");
 
   char sampleRateBuffer[4];
   for(uint8_t i = 0; i < setupLength; i++){
@@ -566,17 +568,17 @@ void setup(void) {
     // Output signal configuration
     if(i == 1 && setupBuffer[i] == '1' && setupBuffer[i-1] == '|'){
       outputSignal[0] = true;
-      Serial.println(F("- Analog output pulse turned on (Pin 3 - DB9M)\n"));
+      Serial.println(F("- Analog output pulse turned on (Pin 3 - DB9M)"));
     }else if(i == 2 && setupBuffer[i] == '1' && setupBuffer[i-2] == '|'){
       outputSignal[1] = true;
       pinMode(outputPinList[1], OUTPUT);
       digitalWrite(outputPinList[1], LOW);
-      Serial.println(F("- Digital output pulse turned on (Pin 7 - DB9F)\n"));
+      Serial.println(F("- Digital output pulse turned on (Pin 7 - DB9F)"));
     }else if(i == 3 && setupBuffer[i] == '1' && setupBuffer[i-3] == '|'){
       outputSignal[2] = true;
       pinMode(outputPinList[2], OUTPUT);
       digitalWrite(outputPinList[2], LOW);
-      Serial.println(F("- Digital output pulse turned on (Pin 5 - DB9F)\n"));
+      Serial.println(F("- Digital output pulse turned on (Pin 5 - DB9F)"));
     }
     // End of output signal configuration
     // Sample rate configuration
@@ -589,17 +591,17 @@ void setup(void) {
       sampleRate = 200;
   }
   LOG_INTERVAL_USEC = (1/sampleRate)*1000000;
-  Serial.println();
-  Serial.println(sampleRate);
-  Serial.println(LOG_INTERVAL_USEC);
+  // Serial.println();
+  // Serial.println(sampleRate);
+  // Serial.println(LOG_INTERVAL_USEC);
   // End of sample rate configuration
 
   //Create another file than bin and csv to store details about the trial received from QT GUI
 
-  Serial.print(F("\nFreeRam: "));
-  Serial.println(FreeRam());
-  Serial.print(F("Records/block: "));
-  Serial.println(DATA_DIM);
+  // Serial.print(F("\nFreeRam: "));
+  // Serial.println(FreeRam());
+  // Serial.print(F("Records/block: "));
+  // Serial.println(DATA_DIM);
   if (sizeof(block_t) != 512) {
     error("Invalid block size");
   }
@@ -618,12 +620,10 @@ void loop(void) {
     binaryToCsv();// Convert .bin file to .csv
   }
 
-  Serial.println();
   Serial.println(F("Loop menu - type:"));
   Serial.println(F("d - dump data to Serial"));
   Serial.println(F("e - overrun error details"));
   Serial.println(F("r - record data"));
-  Serial.println();
   while(!Serial.available()) {}
   char c = tolower(Serial.read());
   // Discard extra Serial data.

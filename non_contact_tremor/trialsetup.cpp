@@ -38,22 +38,24 @@ void TrialSetup::on_chooseDirectoryButton_clicked()
     QString directoryPath = QFileDialog::getExistingDirectory(
                 this,
                 tr("Select directory"),
-                "/"
+                "/",
+                QFileDialog::ShowDirsOnly
                 );
-    QMessageBox::information(this,tr("Directory path"), directoryPath);
-    ui->directoryPathLineEdit->setText(directoryPath);
+    if (directoryPath != QString(""))
+    {
+        //QMessageBox::information(this,tr("Directory path"), directoryPath);
+        ui->directoryPathLineEdit->setText(directoryPath);
+    }
 }
 
 void TrialSetup::apply()
 {
     updateTrialSetupConfig();
     accept();
-
 }
 
 void TrialSetup::updateTrialSetupConfig()
-{
-    //qDebug() << "update called!";
+{    
     currentTrialSetup.outputSignal[0] = static_cast<quint8>(ui->analogOutSignalCheckBox->isChecked());
     currentTrialSetup.outputSignal[1] = static_cast<quint8>(ui->digitalOutSignalACheckBox->isChecked());
     currentTrialSetup.outputSignal[2] = static_cast<quint8>(ui->digitalOutSignalBCheckBox->isChecked());

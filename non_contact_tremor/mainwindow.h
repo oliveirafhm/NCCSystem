@@ -12,6 +12,7 @@ class MainWindow;
 
 class SettingsDialog;
 class TrialSetup;
+class Patient;
 
 class MainWindow : public QMainWindow
 {
@@ -27,6 +28,9 @@ private slots:
     void about();
     void writeData(const QByteArray &data);
     void readData();
+    void initialFirmwareSetup();
+    void startDataCollection();
+    void stopDataCollection();
 
     void handleError(QSerialPort::SerialPortError error);
 
@@ -38,6 +42,7 @@ private:
     QLabel *status;
     SettingsDialog *settings;
     TrialSetup *trialSetup;
+    Patient *patient;
     QSerialPort *serial;
 };
 

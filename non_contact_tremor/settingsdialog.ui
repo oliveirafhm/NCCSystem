@@ -34,7 +34,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="baudRateBox"/>
+       <widget class="QComboBox" name="baudRateBox">
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="dataBitsLabel">
@@ -44,7 +48,11 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="dataBitsBox"/>
+       <widget class="QComboBox" name="dataBitsBox">
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="parityLabel">
@@ -54,7 +62,11 @@
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QComboBox" name="parityBox"/>
+       <widget class="QComboBox" name="parityBox">
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="stopBitsLabel">
@@ -64,7 +76,11 @@
        </widget>
       </item>
       <item row="3" column="1">
-       <widget class="QComboBox" name="stopBitsBox"/>
+       <widget class="QComboBox" name="stopBitsBox">
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+       </widget>
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="flowControlLabel">
@@ -74,7 +90,11 @@
        </widget>
       </item>
       <item row="4" column="1">
-       <widget class="QComboBox" name="flowControlBox"/>
+       <widget class="QComboBox" name="flowControlBox">
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -86,7 +106,11 @@
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QComboBox" name="serialPortInfoListBox"/>
+       <widget class="QComboBox" name="serialPortInfoListBox">
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="descriptionLabel">
@@ -150,6 +174,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="applyButton">
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
        <property name="text">
         <string>Apply</string>
        </property>
@@ -167,6 +194,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>serialPortInfoListBox</tabstop>
+  <tabstop>baudRateBox</tabstop>
+  <tabstop>dataBitsBox</tabstop>
+  <tabstop>parityBox</tabstop>
+  <tabstop>stopBitsBox</tabstop>
+  <tabstop>flowControlBox</tabstop>
+  <tabstop>applyButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
