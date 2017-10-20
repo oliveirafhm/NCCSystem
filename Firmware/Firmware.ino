@@ -538,6 +538,11 @@ void setup(void) {
   // Modify ADC and DAC resolution (it works only for arduino due)
   analogReadResolution(12);
   analogWriteResolution(12);
+  //Check initial battery level
+  initBatteryLevel = analogRead(analogInPinList[0]);
+  if(initBatteryLevel < batteryLevelThreshold){
+    fatalBlink();
+  }
   //Sets digital pins to input
   for (uint8_t i = 0; i < (sizeof(digitalInPinList)/sizeof(uint8_t)); i++)
   {
