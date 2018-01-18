@@ -1,5 +1,6 @@
 /**
  * Edited by Fábio Henrique (oliveirafhm@gmail.com) - 22/01/2016
+ * Last modification: 11/01/2018
  * This program logs data to a binary file.  Functions are included
  * to convert the binary file to a csv text file.
  *
@@ -578,12 +579,12 @@ void setup(void) {
       outputSignal[1] = true;
       pinMode(outputPinList[1], OUTPUT);
       digitalWrite(outputPinList[1], LOW);
-      Serial.println(F("- Digital output pulse turned on (Pin 7 - DB9F)"));
+      Serial.println(F("- Digital output pulse turned on (Pin 6 - DB9F)"));
     }else if(i == 3 && setupBuffer[i] == '1' && setupBuffer[i-3] == '|'){
       outputSignal[2] = true;
       pinMode(outputPinList[2], OUTPUT);
       digitalWrite(outputPinList[2], LOW);
-      Serial.println(F("- Digital output pulse turned on (Pin 5 - DB9F)"));
+      Serial.println(F("- Digital output pulse turned on (Pin 7 - DB9F)"));
     }
     // End of output signal configuration
     // Sample rate configuration
