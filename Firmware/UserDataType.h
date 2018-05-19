@@ -1,5 +1,5 @@
 //* Edited by Fábio Henrique (oliveirafhm@gmail.com) - 22/01/2016
-// Last modification: 11/01/2018
+// Last modification: 18/05/2018
 #ifndef UserDataType_h
 #define UserDataType_h
 const String headerList[] = {"u_time","battery_status","v1","v2","analog_pulse_input_a","digital_input_a","digital_input_b"};
@@ -15,7 +15,7 @@ bool outputSignal[] = {false, false, false};
 const uint8_t greenLedPin = 3;
 float sampleRate = 200;
 //Adjusted to Arduino Due (12 bits ADC) ~1.3v (after voltage divider)
-const uint16_t batteryLevelThreshold = 1600;//0;//2600;
+const uint16_t batteryLevelThreshold = 1600;
 unsigned short initBatteryLevel;
 struct data_t {
   unsigned long time;

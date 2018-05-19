@@ -1,6 +1,6 @@
 /**
  * Edited by Fábio Henrique (oliveirafhm@gmail.com) - 22/01/2016
- * Last modification: 11/01/2018
+ * Last modification: 18/05/2018
  * This program logs data to a binary file.  Functions are included
  * to convert the binary file to a csv text file.
  *
@@ -81,7 +81,7 @@ const int8_t ERROR_LED_PIN = 2;
 const uint32_t FILE_BLOCK_COUNT = 256000;
 
 // log file base name.  Must be six characters or less.
-#define FILE_BASE_NAME "Plesse"
+#define FILE_BASE_NAME "PS"
 //------------------------------------------------------------------------------
 // Buffer definitions.
 //
@@ -387,7 +387,19 @@ void logData() {
     emptyQueue[emptyHead] = &block[i];
     emptyHead = queueNext(emptyHead);
   }
-  Serial.println(F("Logging - type 2 to stop"));
+  // Give SD time to prepare for big write.
+  delay(1000);
+  // Serial.println(F("Type 1 to start logging | After, type 2 to stop"));
+  Serial.println(F("Type 1 to start logging"));
+  while(1){
+    if (Serial.available()) {
+      char c = tolower(Serial.read());
+      if (c == '1'){
+        break;
+      }
+    }
+  }
+  Serial.println(F("Logging... - type 2 to stop"));
   // Wait for Serial Idle.
   Serial.flush();
   delay(10);
@@ -550,9 +562,9 @@ void setup(void) {
     pinMode(digitalInPinList[i], INPUT);
   }
   Serial.begin(115200);
-  //Serial.setTimeout(2000);//Test
   while (!Serial) {}
-  Serial.println("Ready");
+  // Serial.println(initBatteryLevel);//Test
+  Serial.println(F("Ready"));
   // Serial.println(F("Initial setup\n"));
   // Serial.println(F("Waiting for setup parameters, please use the follow format (without spaces):\n"));
   // //|on or off using binary digit|integer value to represent sample rate|#
@@ -574,17 +586,17 @@ void setup(void) {
     // Output signal configuration
     if(i == 1 && setupBuffer[i] == '1' && setupBuffer[i-1] == '|'){
       outputSignal[0] = true;
-      Serial.println(F("- Analog output pulse turned on (Pin 3 - DB9M)"));
+      Serial.println(F("- Analog output pulse turned on (DAC0)"));
     }else if(i == 2 && setupBuffer[i] == '1' && setupBuffer[i-2] == '|'){
       outputSignal[1] = true;
       pinMode(outputPinList[1], OUTPUT);
       digitalWrite(outputPinList[1], LOW);
-      Serial.println(F("- Digital output pulse turned on (Pin 6 - DB9F)"));
+      Serial.println(F("- Digital output pulse turned on (Pin 6)"));
     }else if(i == 3 && setupBuffer[i] == '1' && setupBuffer[i-3] == '|'){
       outputSignal[2] = true;
       pinMode(outputPinList[2], OUTPUT);
       digitalWrite(outputPinList[2], LOW);
-      Serial.println(F("- Digital output pulse turned on (Pin 7 - DB9F)"));
+      Serial.println(F("- Digital output pulse turned on (Pin 7)"));
     }
     // End of output signal configuration
     // Sample rate configuration
@@ -625,7 +637,12 @@ void loop(void) {
     Serial.println();
     binaryToCsv();// Convert .bin file to .csv
   }
-
+  initBatteryLevel = analogRead(analogInPinList[0]);
+  // Serial.println(initBatteryLevel);
+  if(initBatteryLevel < batteryLevelThreshold){
+    //Serial.println(F("Low battery, change it and reset to continue."));
+    fatalBlink();
+  }
   Serial.println(F("Loop menu - type:"));
   Serial.println(F("d - dump data to Serial"));
   Serial.println(F("e - overrun error details"));
