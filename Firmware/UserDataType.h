@@ -13,9 +13,9 @@ const uint8_t outputPinList[] = {DAC0,6,7};
 bool outputSignal[] = {false, false, false};
 //const uint8_t redLedPin = 2;// The same as ERROR_LED_PIN defined in main .ino file
 const uint8_t greenLedPin = 3;
-float sampleRate = 200;
+float sampleRate = 3000;
 //Adjusted to Arduino Due (12 bits ADC) ~1.3v (after voltage divider)
-const uint16_t batteryLevelThreshold = 1600;
+const uint16_t batteryLevelThreshold = 0;//Test//1600;
 unsigned short initBatteryLevel;
 struct data_t {
   unsigned long time;

@@ -1,6 +1,7 @@
 /**
  * Edited by Fábio Henrique (oliveirafhm@gmail.com) - 22/01/2016
- * Last modification: 18/05/2018
+ * Last modification: 25/05/2018
+ * 
  * This program logs data to a binary file.  Functions are included
  * to convert the binary file to a csv text file.
  *
@@ -60,7 +61,7 @@ void printHeader(Print* pr) {
 // Start of configuration constants.
 //==============================================================================
 //Interval between data records in microseconds.
-uint32_t LOG_INTERVAL_USEC = (1/sampleRate)*1000000;//5000;//200Hz//2500;//400Hz//5000;//200Hz//2000;//500Hz
+uint32_t LOG_INTERVAL_USEC = (1/sampleRate)*1000000;
 //------------------------------------------------------------------------------
 // Pin definitions.
 //
@@ -120,7 +121,7 @@ SdFat sd;
 
 SdBaseFile binFile;
 
-char binName[13] = FILE_BASE_NAME "00.bin";
+char binName[13] = FILE_BASE_NAME "000.bin";
 
 // Number of data records in a block.
 const uint16_t DATA_DIM = (512 - 4)/sizeof(data_t);
@@ -187,7 +188,7 @@ void binaryToCsv() {
   binFile.rewind();
   // Create a new csvFile.
   strcpy(csvName, binName);
-  strcpy(&csvName[BASE_NAME_SIZE + 3], "csv");
+  strcpy(&csvName[BASE_NAME_SIZE + 4], "csv");//Test
 
   if (!csvFile.open(csvName, O_WRITE | O_CREAT | O_TRUNC)) {
     error("open csvFile failed");
@@ -318,18 +319,24 @@ void logData() {
   Serial.println();
 
   // Find unused file name.
+  // Max file number is 999, after that you should delete older files by hand
+  // Test code: https://repl.it/@oliveirafhm/GrumpyGrowingLoop
   if (BASE_NAME_SIZE > 6) {
     error("FILE_BASE_NAME too long");
   }
   while (sd.exists(binName)) {
-    if (binName[BASE_NAME_SIZE + 1] != '9') {
+    if (binName[BASE_NAME_SIZE + 2] != '9') {
+      binName[BASE_NAME_SIZE + 2]++;      
+    } else if (binName[BASE_NAME_SIZE + 1] != '9') {
       binName[BASE_NAME_SIZE + 1]++;
+      binName[BASE_NAME_SIZE + 2] = '0';      
     } else {
       binName[BASE_NAME_SIZE + 1] = '0';
+      binName[BASE_NAME_SIZE + 2] = '0';
       if (binName[BASE_NAME_SIZE] == '9') {
         error("Can't create file name");
       }
-      binName[BASE_NAME_SIZE]++;
+      binName[BASE_NAME_SIZE]++;      
     }
   }
   // Delete old tmp file.
@@ -399,7 +406,7 @@ void logData() {
       }
     }
   }
-  Serial.println(F("Logging... - type 2 to stop"));
+  Serial.println(F("Logging... - type 2 to stop\n"));
   // Wait for Serial Idle.
   Serial.flush();
   delay(10);
@@ -606,7 +613,7 @@ void setup(void) {
   }
   sampleRate = atof(sampleRateBuffer);
   if (sampleRate == 0){
-      sampleRate = 200;
+      sampleRate = 3000;
   }
   LOG_INTERVAL_USEC = (1/sampleRate)*1000000;
   // Serial.println();
