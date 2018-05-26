@@ -1,5 +1,5 @@
-//* Edited by Fábio Henrique (oliveirafhm@gmail.com) - 22/01/2016
-// Last modification: 18/05/2018
+// Edited by Fábio Henrique (oliveirafhm@gmail.com) - 22/01/2016
+// Last modification: 26/05/2018
 #ifndef UserDataType_h
 #define UserDataType_h
 const String headerList[] = {"u_time","battery_status","v1","v2","analog_pulse_input_a","digital_input_a","digital_input_b"};

@@ -1,6 +1,6 @@
 /**
  * Edited by Fábio Henrique (oliveirafhm@gmail.com) - 22/01/2016
- * Last modification: 25/05/2018
+ * Last modification: 26/05/2018
  * 
  * This program logs data to a binary file.  Functions are included
  * to convert the binary file to a csv text file.
