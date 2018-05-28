@@ -74,6 +74,9 @@ public:
 
     Settings settings() const;
 
+public slots:
+    void show();
+
 private slots:
     void showPortInfo(int idx);
     void apply();
@@ -89,6 +92,7 @@ private:
     Ui::SettingsDialog *ui;
     Settings currentSettings;
     QIntValidator *intValidator;
+    int idxSerialPortListBox;
 };
 
 #endif // SETTINGSDIALOG_H

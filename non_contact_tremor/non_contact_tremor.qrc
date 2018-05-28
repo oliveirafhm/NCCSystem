@@ -11,5 +11,9 @@
         <file>images/usb-settings.png</file>
         <file>images/play.png</file>
         <file>images/stop.png</file>
+        <file>images/rec_green.png</file>
+        <file>images/rec_neutral.png</file>
+        <file>images/rec_red.png</file>
+        <file>images/rec_yellow.png</file>
     </qresource>
 </RCC>

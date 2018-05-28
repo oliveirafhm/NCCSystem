@@ -6,9 +6,9 @@
 
 QT       += core gui serialport
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-TARGET = TremorDataLogger
+TARGET = DataLogger
 TEMPLATE = app
 
 
@@ -16,12 +16,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     trialsetup.cpp \
     settingsdialog.cpp \
-    patient.cpp
+    patient.cpp \
+    qcustomplot.cpp
 
 HEADERS  += mainwindow.h \
     trialsetup.h \
     settingsdialog.h \
-    patient.h
+    patient.h \
+    qcustomplot.h
 
 FORMS    += mainwindow.ui \
     trialsetup.ui \

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.6.1, 2018-05-24T22:10:58. -->
+<!-- Written by QtCreator 4.6.1, 2018-05-27T01:14:04. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -310,7 +310,7 @@
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">non_contact_tremor.pro</value>
     <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory"></value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory.default">/Users/oliveirafhm/Documents/GitProjects/non contact tremor/build-non_contact_tremor-Desktop_Qt_5_11_0_clang_64bit-Debug/TremorDataLogger.app/Contents/MacOS</value>
+    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory.default">/Users/oliveirafhm/Documents/GitProjects/non contact tremor/build-non_contact_tremor-Desktop_Qt_5_11_0_clang_64bit-Debug/DataLogger.app/Contents/MacOS</value>
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>

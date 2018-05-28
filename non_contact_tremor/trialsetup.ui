@@ -7,11 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>351</width>
-    <height>283</height>
+    <height>291</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Trial setup</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="1">
@@ -22,6 +25,9 @@
      <layout class="QGridLayout" name="gridLayout_4">
       <item row="0" column="0">
        <widget class="QLineEdit" name="collectionTimeoutLineEdit">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
          <string/>
         </property>

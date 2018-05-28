@@ -78,6 +78,14 @@ SettingsDialog::Settings SettingsDialog::settings() const
     return currentSettings;
 }
 
+void SettingsDialog::show()
+{
+    fillPortsInfo();
+    if (idxSerialPortListBox != -1)
+        ui->serialPortInfoListBox->setCurrentIndex(idxSerialPortListBox);
+    QWidget::show();
+}
+
 void SettingsDialog::showPortInfo(int idx)
 {
     if (idx == -1)
@@ -154,7 +162,7 @@ void SettingsDialog::fillPortsInfo()
     ui->serialPortInfoListBox->clear();
     QString description;
     QString manufacturer;
-    QString serialNumber;
+    QString serialNumber;    
     foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
         QStringList list;
         description = info.description();
@@ -177,6 +185,7 @@ void SettingsDialog::fillPortsInfo()
 void SettingsDialog::updateSettings()
 {
     currentSettings.name = ui->serialPortInfoListBox->currentText();
+    idxSerialPortListBox = ui->serialPortInfoListBox->currentIndex();
 
     if (ui->baudRateBox->currentIndex() == 4) {
         currentSettings.baudRate = ui->baudRateBox->currentText().toInt();

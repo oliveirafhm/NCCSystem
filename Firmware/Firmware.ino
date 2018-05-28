@@ -1,7 +1,7 @@
 /**
  * Edited by Fábio Henrique (oliveirafhm@gmail.com) - 22/01/2016
  * Last modification: 26/05/2018
- * 
+ *
  * This program logs data to a binary file.  Functions are included
  * to convert the binary file to a csv text file.
  *
@@ -32,6 +32,18 @@ void acquireData(data_t* data) {
   for (int i = 0; i < DIGITAL_DIM; i++) {
     data->digital[i] = digitalRead(digitalInPinList[i]);
   }
+  // Serial print -- Test --
+  // Serial.print(data->time);
+  // for (int i = 0; i < ADC_DIM; i++) {
+  //   Serial.print(',');
+  //   Serial.print(data->adc[i]);
+  // }
+  // for (int i = 0; i < DIGITAL_DIM; i++) {
+  //   Serial.print(',');
+  //   Serial.print(data->digital[i]);
+  // }
+  // Serial.println();
+  //
 }
 
 // Print a data record.
@@ -188,7 +200,7 @@ void binaryToCsv() {
   binFile.rewind();
   // Create a new csvFile.
   strcpy(csvName, binName);
-  strcpy(&csvName[BASE_NAME_SIZE + 4], "csv");//Test
+  strcpy(&csvName[BASE_NAME_SIZE + 4], "csv");
 
   if (!csvFile.open(csvName, O_WRITE | O_CREAT | O_TRUNC)) {
     error("open csvFile failed");
@@ -326,17 +338,17 @@ void logData() {
   }
   while (sd.exists(binName)) {
     if (binName[BASE_NAME_SIZE + 2] != '9') {
-      binName[BASE_NAME_SIZE + 2]++;      
+      binName[BASE_NAME_SIZE + 2]++;
     } else if (binName[BASE_NAME_SIZE + 1] != '9') {
       binName[BASE_NAME_SIZE + 1]++;
-      binName[BASE_NAME_SIZE + 2] = '0';      
+      binName[BASE_NAME_SIZE + 2] = '0';
     } else {
       binName[BASE_NAME_SIZE + 1] = '0';
       binName[BASE_NAME_SIZE + 2] = '0';
       if (binName[BASE_NAME_SIZE] == '9') {
         error("Can't create file name");
       }
-      binName[BASE_NAME_SIZE]++;      
+      binName[BASE_NAME_SIZE]++;
     }
   }
   // Delete old tmp file.
@@ -569,6 +581,7 @@ void setup(void) {
     pinMode(digitalInPinList[i], INPUT);
   }
   Serial.begin(115200);
+  // Serial.begin(230400);// Test 614400
   while (!Serial) {}
   // Serial.println(initBatteryLevel);//Test
   Serial.println(F("Ready"));
@@ -582,7 +595,7 @@ void setup(void) {
   const uint8_t setupLength = 11;
   char setupBuffer[setupLength];
   Serial.readBytesUntil('#', setupBuffer, setupLength);
-  //Serial.println(setupBuffer);
+  // Serial.println(setupBuffer);
   //Serial.println("ok2");
 
   char sampleRateBuffer[4];

@@ -6,24 +6,125 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>900</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Non contact tremor data logger</string>
+   <string>Non contact sensor data logger</string>
   </property>
   <property name="windowIcon">
    <iconset resource="non_contact_tremor.qrc">
     <normaloff>:/images/matrix-hand.png</normaloff>:/images/matrix-hand.png</iconset>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <item>
+     <widget class="QGroupBox" name="serialMonitorGroupBox">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="title">
+       <string>Serial monitor (read-only)</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPlainTextEdit" name="serialMonitorTextEdit">
+         <property name="font">
+          <font>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QWidget" name="verticalWidget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>2</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0">
+       <item>
+        <widget class="QGroupBox" name="xAxisGroupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="title">
+          <string>X-Axis</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QCustomPlot" name="xAxisPlot" native="true"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="yAxisGroupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <pointsize>14</pointsize>
+          </font>
+         </property>
+         <property name="title">
+          <string>Y-Axis</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QCustomPlot" name="yAxisPlot" native="true"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>900</width>
      <height>22</height>
     </rect>
    </property>
@@ -84,7 +185,13 @@
    <addaction name="actionStart"/>
    <addaction name="actionStop"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
+  </widget>
   <action name="actionConnect">
    <property name="icon">
     <iconset resource="non_contact_tremor.qrc">
@@ -95,6 +202,11 @@
    </property>
    <property name="toolTip">
     <string>Connect to serial port</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionDisconnect">
@@ -108,6 +220,11 @@
    <property name="toolTip">
     <string>Disconnect from serial port</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionConfigure">
    <property name="icon">
@@ -118,7 +235,12 @@
     <string>Configure serial</string>
    </property>
    <property name="toolTip">
-    <string>Configure serial port</string>
+    <string>Configure serial port connection</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionQuit">
@@ -129,11 +251,19 @@
    <property name="text">
     <string>Quit</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionPatient">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="non_contact_tremor.qrc">
      <normaloff>:/images/patient-profile.png</normaloff>:/images/patient-profile.png</iconset>
@@ -143,6 +273,11 @@
    </property>
    <property name="toolTip">
     <string>Edit patient data</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionTrialSetup">
@@ -156,6 +291,11 @@
    <property name="toolTip">
     <string>Trial setup</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionClear">
    <property name="icon">
@@ -168,6 +308,11 @@
    <property name="toolTip">
     <string>Clear data</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionAbout">
    <property name="text">
@@ -176,10 +321,20 @@
    <property name="toolTip">
     <string>About program</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionAboutQt">
    <property name="text">
     <string>About Qt</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionStart">
@@ -193,6 +348,11 @@
    <property name="toolTip">
     <string>Starts the collect</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionStop">
    <property name="icon">
@@ -205,9 +365,22 @@
    <property name="toolTip">
     <string>Stops the collect</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+    </font>
+   </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="non_contact_tremor.qrc"/>
  </resources>
