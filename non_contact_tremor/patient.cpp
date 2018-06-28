@@ -38,7 +38,8 @@ void Patient::updatePatientData()
 {
     currentPatientData.name = ui->nameLineEdit->text();
     currentPatientData.gender = ui->genderComboBox->currentText();
-    currentPatientData.age = ui->ageSpinBox->value();
+//    currentPatientData.birthdate = ui->dateEdit->date();
+
 //    qDebug() << "updatePatientData";
 //    qDebug() << currentPatientData.gender << "Current";
 //    qDebug() << ui->genderComboBox->currentText() << "From combo";
@@ -62,5 +63,5 @@ void Patient::fillUI()
 //        qDebug() << "Female";
     }
     ui->genderComboBox->setCurrentIndex(gender);
-    ui->ageSpinBox->setValue(currentPatientData.age);
+//    ui->dateEdit->setDate(currentPatientData.birthdate);
 }

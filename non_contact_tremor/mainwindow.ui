@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Non contact sensor data logger</string>
+   <string>Non contact sensor data logger 1.0</string>
   </property>
   <property name="windowIcon">
    <iconset resource="non_contact_tremor.qrc">
@@ -40,11 +40,17 @@
         <widget class="QPlainTextEdit" name="serialMonitorTextEdit">
          <property name="font">
           <font>
-           <pointsize>13</pointsize>
+           <pointsize>14</pointsize>
           </font>
+         </property>
+         <property name="undoRedoEnabled">
+          <bool>false</bool>
          </property>
          <property name="readOnly">
           <bool>true</bool>
+         </property>
+         <property name="centerOnScroll">
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -135,6 +141,9 @@
     <addaction name="actionConnect"/>
     <addaction name="actionDisconnect"/>
     <addaction name="separator"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionPlotSignals"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuTools">
@@ -184,6 +193,9 @@
    <addaction name="separator"/>
    <addaction name="actionStart"/>
    <addaction name="actionStop"/>
+   <addaction name="separator"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionPlotSignals"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="font">
@@ -369,6 +381,30 @@
     <font>
      <pointsize>14</pointsize>
     </font>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="non_contact_tremor.qrc">
+     <normaloff>:/images/save-file-option.png</normaloff>:/images/save-file-option.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save data in this PC</string>
+   </property>
+  </action>
+  <action name="actionPlotSignals">
+   <property name="icon">
+    <iconset resource="non_contact_tremor.qrc">
+     <normaloff>:/images/signal.png</normaloff>:/images/signal.png</iconset>
+   </property>
+   <property name="text">
+    <string>Plot signals</string>
+   </property>
+   <property name="toolTip">
+    <string>Plot the recorded signals</string>
    </property>
   </action>
  </widget>

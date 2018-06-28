@@ -15,5 +15,7 @@
         <file>images/rec_neutral.png</file>
         <file>images/rec_red.png</file>
         <file>images/rec_yellow.png</file>
+        <file>images/save-file-option.png</file>
+        <file>images/signal.png</file>
     </qresource>
 </RCC>

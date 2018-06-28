@@ -21,7 +21,7 @@ public:
     struct PatientData{
         QString name = "";
         QString gender = "";
-        quint8 age = 0;
+//        QString birthdate = "";
     };
 
     explicit Patient(QWidget *parent = 0);

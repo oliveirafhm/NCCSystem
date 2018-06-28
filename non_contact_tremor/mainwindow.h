@@ -19,6 +19,19 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    enum StatusFlag {
+        Init = 0,
+        Connected = 1,
+        Disconnected = 2,
+        Recording = 3,
+        Stopped = 4,
+        ConversionDone = 5,
+        Saving = 6,
+        Saved = 7,
+        Ploting = 8,
+        Unknown = -1
+    };
+    Q_ENUM(StatusFlag)
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -32,13 +45,16 @@ private slots:
     void initialFirmwareSetup();
     void startDataCollection();
     void stopDataCollection();
-
+    void saveDataCollection();
+    void plotSignals();
     void handleError(QSerialPort::SerialPortError error);
 
 private:
     void initActionsConnections();
-    void showStatusMessage(const QString &message);
+    void showStatusMessage(const QString &message, qint8 sF);
     void changeIconStatus(qint8 iStatus);
+    void stopDataHandler(char *data);
+    void saveDataHandle(char *data);
 
     Ui::MainWindow *ui;
     QLabel *status;
@@ -51,7 +67,8 @@ private:
     TrialSetup *trialSetup;
     Patient *patient;
     QSerialPort *serial;
-    QByteArray *_ba;
+    QByteArray *_ba;    
+    qint8 statusFlag;
 };
 
 #endif // MAINWINDOW_H

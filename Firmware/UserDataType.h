@@ -25,4 +25,5 @@ struct data_t {
   unsigned short adc[ADC_DIM];
   unsigned short digital[DIGITAL_DIM];
 };
+unsigned long lastTime = 0;
 #endif  // UserDataType_h

@@ -23,6 +23,7 @@ public:
         quint8 outputSignal[3] = {0,1,0};
         quint16 sampleRate = 3000;
         quint8 collectionTimeOut = 0;
+        QString fileName = "defaultName";
         QString directoryPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     };
 

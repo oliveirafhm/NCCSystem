@@ -61,6 +61,7 @@ void TrialSetup::updateTrialSetupConfig()
     currentTrialSetup.outputSignal[2] = static_cast<quint8>(ui->digitalOutSignalBCheckBox->isChecked());
     currentTrialSetup.sampleRate = ui->sampleRateLineEdit->text().toInt();
     currentTrialSetup.collectionTimeOut = ui->collectionTimeoutLineEdit->text().toInt();
+    currentTrialSetup.fileName = ui->fileNameEdit->text();
     currentTrialSetup.directoryPath = ui->directoryPathLineEdit->text();
 }
 
@@ -72,5 +73,6 @@ void TrialSetup::fillUI()
 
     ui->sampleRateLineEdit->setText(QString::number(currentTrialSetup.sampleRate));
     ui->collectionTimeoutLineEdit->setText(QString::number(currentTrialSetup.collectionTimeOut));
+    ui->fileNameEdit->setText(currentTrialSetup.fileName);
     ui->directoryPathLineEdit->setText(currentTrialSetup.directoryPath);
 }
