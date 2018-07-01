@@ -1,8 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QFile>
 #include <QMainWindow>
 #include <QSerialPort>
+#include <QTextStream>
 
 class QLabel;
 
@@ -69,6 +71,8 @@ private:
     QSerialPort *serial;
     QByteArray *_ba;    
     qint8 statusFlag;
+    QFile *csvFile;
+    QTextStream *stream;
 };
 
 #endif // MAINWINDOW_H
