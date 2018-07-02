@@ -34,6 +34,9 @@ public:
         Unknown = -1
     };
     Q_ENUM(StatusFlag)
+
+//    void saveDataHandler(char *data);
+
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -56,7 +59,8 @@ private:
     void showStatusMessage(const QString &message, qint8 sF);
     void changeIconStatus(qint8 iStatus);
     void stopDataHandler(char *data);
-    void saveDataHandle(char *data);
+    void saveDataHandler(char *data);
+    void appendTextSerialMonitor(const QString &text);
 
     Ui::MainWindow *ui;
     QLabel *status;
@@ -73,6 +77,7 @@ private:
     qint8 statusFlag;
     QFile *csvFile;
     QTextStream *stream;
+    QString serialMonitorText;
 };
 
 #endif // MAINWINDOW_H
