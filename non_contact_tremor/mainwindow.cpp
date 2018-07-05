@@ -208,7 +208,7 @@ void MainWindow::saveDataCollection()
     ui->actionStart->setEnabled(false);
     // Create file and open it to write
     TrialSetup::TrialSetupConfig ts = trialSetup->trialSetupConfig();
-    QString fullFileName = ts.directoryPath + ts.directoryPath.data()[0] + ts.fileName + ".csv";
+    fullFileName = ts.directoryPath + ts.directoryPath.data()[0] + ts.fileName + ".csv";
     // Rename file name if need it to avoid override
     qint8 nFile = -1;
     while (QFile::exists(fullFileName)){
@@ -222,7 +222,6 @@ void MainWindow::saveDataCollection()
         // Create header file
         // Date and time | Plesse csv file name | ADC resolution
         serialMonitorText = ui->serialMonitorTextEdit->toPlainText();
-//        qDebug() << serialMonitorLog;
         qint16 csvNameIndex;
         if (serialMonitorText.count(".csv") > 1)
             csvNameIndex = serialMonitorText.lastIndexOf(".csv");
@@ -235,7 +234,6 @@ void MainWindow::saveDataCollection()
                 << psFileName << " | " << "ADC: 12 bits";
 
         // Save log (serial output) -> filename+plessfilename.log
-//        qDebug() << fullFileName.mid(0,fullFileName.length()-4);
         QFile log(fullFileName.mid(0,fullFileName.length()-4) + "_" + psFileName + ".log");
         if (log.open(QFile::WriteOnly | QFile::Text)){
             QTextStream out(&log);
@@ -261,10 +259,10 @@ void MainWindow::saveDataHandler(char *data)
             showStatusMessage(tr("Data saved successfully!"), StatusFlag::Saved);
             appendTextSerialMonitor("\n--------------------------------\n");
             // Flush and close file
-            csvFile -> flush();
+            csvFile->flush();
             csvFile->close();
             serialMonitorText.clear();
-            qDebug() << data;
+//            qDebug() << data;
         }
     }
 }
@@ -274,13 +272,14 @@ void MainWindow::appendTextSerialMonitor(const QString &text)
     ui->serialMonitorTextEdit->moveCursor(QTextCursor::End);
     ui->serialMonitorTextEdit->insertPlainText(text);
     ui->serialMonitorTextEdit->moveCursor(QTextCursor::End);
-//    serialMonitorText.append(text);
 }
 
 void MainWindow::plotSignals()
 {
     ui->actionPlotSignals->setEnabled(false);
     qDebug() << "Plot signals!";
+    plot = new Plot;
+    plot->loadData(fullFileName);
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)

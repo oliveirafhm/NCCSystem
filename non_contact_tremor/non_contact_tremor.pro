@@ -17,13 +17,15 @@ SOURCES += main.cpp\
     trialsetup.cpp \
     settingsdialog.cpp \
     patient.cpp \
-    qcustomplot.cpp
+    qcustomplot.cpp \
+    plot.cpp
 
 HEADERS  += mainwindow.h \
     trialsetup.h \
     settingsdialog.h \
     patient.h \
-    qcustomplot.h
+    qcustomplot.h \
+    plot.h
 
 FORMS    += mainwindow.ui \
     trialsetup.ui \

@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "plot.h"
+
 #include <QFile>
 #include <QMainWindow>
 #include <QSerialPort>
@@ -75,9 +77,11 @@ private:
     QSerialPort *serial;
     QByteArray *_ba;    
     qint8 statusFlag;
+    QString fullFileName;
     QFile *csvFile;
     QTextStream *stream;
     QString serialMonitorText;
+    Plot *plot;
 };
 
 #endif // MAINWINDOW_H
