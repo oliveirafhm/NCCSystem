@@ -15,7 +15,7 @@ bool outputSignal[] = {false, false, false};
 const uint8_t greenLedPin = 3;
 float sampleRate = 3000;
 //Adjusted to Arduino Due (12 bits ADC) ~1.3v (after voltage divider)
-const uint16_t batteryLevelThreshold = 0;//Test//1600;
+const uint16_t batteryLevelThreshold = 1600;//Test//1600;
 unsigned short initBatteryLevel;
 // 4 bytes, 2 bytes * 4 = 8 bytes, 2 bytes * 2 = 4 bytes -> 16 Bytes + commas
 // = 16 + 6 = 22 Bytes per row (sample)

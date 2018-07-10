@@ -32,7 +32,8 @@ public:
         ConversionDone = 5,
         Saving = 6,
         Saved = 7,
-        Ploting = 8,
+        Plotting = 8,
+        Plotted = 9,
         Unknown = -1
     };
     Q_ENUM(StatusFlag)
@@ -54,6 +55,7 @@ private slots:
     void stopDataCollection();
     void saveDataCollection();
     void plotSignals();
+    void plotHandler();
     void handleError(QSerialPort::SerialPortError error);
 
 private:

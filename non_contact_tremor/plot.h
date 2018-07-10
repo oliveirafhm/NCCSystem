@@ -15,20 +15,23 @@ public:
     explicit Plot(QObject *parent = nullptr);
     ~Plot();
 
-    void loadData(const QString &path);
+    bool loadData(const QString &path);
 
+    // First and second chart data (x- and y-axis of PS25454)
+    QVector<double> x, y1, y2;
+    // Additional data
+    QVector<double> batteryStatus, analogInA, digitalInA, digitalInB;
 signals:
 
 public slots:
 
 private:
     void parseData(QTextStream &data);
+    double adcConversion(qint32 value, float systemVoltage , qint32 factor);
+    void clearData();
 
-//    Ui::MainWindow *gui;
     QFile *csvFile;
     QTextStream *stream;
-    QVector<double> x1, y1;
-    QVector<double> x2, y2;
 };
 
 #endif // PLOT_H

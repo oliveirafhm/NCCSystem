@@ -59,7 +59,7 @@ MainWindow::~MainWindow()
     delete trialSetup;
     delete patient;
     delete ui;
-    // TODO: Check if i need to close/delete serial here
+    // TODO: Check if i need to delete something more
 }
 
 void MainWindow::openSerialPort()
@@ -178,6 +178,11 @@ void MainWindow::startDataCollection()
     ui->actionDisconnect->setEnabled(false);
     ui->actionPlotSignals->setEnabled(false);
     changeIconStatus(3);
+    // Clear graph ui component
+    ui->xAxisPlot->clearGraphs();
+    ui->yAxisPlot->clearGraphs();
+    ui->xAxisPlot->replot();
+    ui->yAxisPlot->replot();
 }
 
 void MainWindow::stopDataCollection()
@@ -276,10 +281,58 @@ void MainWindow::appendTextSerialMonitor(const QString &text)
 
 void MainWindow::plotSignals()
 {
+    showStatusMessage(tr("Plotting..."), StatusFlag::Plotting);
     ui->actionPlotSignals->setEnabled(false);
-    qDebug() << "Plot signals!";
+    QTimer::singleShot(100,this,SLOT(plotHandler()));
+}
+void MainWindow::plotHandler()
+{
     plot = new Plot;
-    plot->loadData(fullFileName);
+    bool loadStatus = plot->loadData(fullFileName);
+    if (loadStatus){
+        // Create graph and assign data to it
+        ui->xAxisPlot->addGraph();
+        ui->xAxisPlot->graph(0)->setData(plot->x, plot->y1, true);
+        ui->xAxisPlot->graph(0)->setName("Sensor data (x-axis)");
+        ui->yAxisPlot->addGraph();
+        ui->yAxisPlot->graph(0)->setData(plot->x, plot->y2, true);
+        ui->yAxisPlot->graph(0)->setName("Sensor data (y-axis)");
+        // Add Digital pulse A to the graphs
+        ui->xAxisPlot->addGraph();
+        ui->xAxisPlot->graph(1)->setPen(QPen(Qt::red));
+        ui->xAxisPlot->graph(1)->setData(plot->x, plot->digitalInA, true);
+        ui->xAxisPlot->graph(1)->setName("Digital input A");
+        ui->yAxisPlot->addGraph();
+        ui->yAxisPlot->graph(1)->setPen(QPen(Qt::red));
+        ui->yAxisPlot->graph(1)->setData(plot->x, plot->digitalInA, true);
+        ui->yAxisPlot->graph(1)->setName("Digital input A");
+        // Set axes labels
+        ui->xAxisPlot->xAxis->setLabel("Time (s)");
+        ui->xAxisPlot->yAxis->setLabel("V");
+        ui->yAxisPlot->xAxis->setLabel("Time (s)");
+        ui->yAxisPlot->yAxis->setLabel("V");
+        // Set axes ranges
+//        ui->xAxisPlot->xAxis->setRange(0, 10);
+        ui->xAxisPlot->yAxis->setRange(0, 3.3);
+//        ui->yAxisPlot->xAxis->setRange(0, 10);
+        ui->yAxisPlot->yAxis->setRange(0, 3.3);
+
+        ui->xAxisPlot->legend->setVisible(true);
+        ui->yAxisPlot->legend->setVisible(true);
+
+        // Allow user to drag axis with mouse, zoom with mouse wheel and select graphs by clicking
+        ui->xAxisPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+        ui->yAxisPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+        // Update UI component
+        ui->xAxisPlot->rescaleAxes();
+        ui->yAxisPlot->rescaleAxes();
+        ui->xAxisPlot->replot();
+        ui->yAxisPlot->replot();
+        ui->xAxisPlot->update();
+        ui->yAxisPlot->update();
+
+        showStatusMessage(tr("Signals already plotted."), StatusFlag::Plotted);
+    }
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
