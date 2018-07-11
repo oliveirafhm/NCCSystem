@@ -233,7 +233,7 @@ void MainWindow::saveDataCollection()
         else
             csvNameIndex = serialMonitorText.indexOf(".csv");
 
-        QString psFileName = serialMonitorText.mid(csvNameIndex - 5,9);
+        QString psFileName = serialMonitorText.mid(csvNameIndex - 6,10);
 
         *stream << QDateTime::currentDateTime().toString() << " |  "
                 << psFileName << " | " << "ADC: 12 bits";

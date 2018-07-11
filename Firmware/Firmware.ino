@@ -138,7 +138,8 @@ SdFat sd;
 
 SdBaseFile binFile;
 
-char binName[13] = FILE_BASE_NAME "000.bin";
+// char binName[13] = FILE_BASE_NAME "000.bin";
+char binName[13] = FILE_BASE_NAME "0000.bin";
 
 // Number of data records in a block.
 const uint16_t DATA_DIM = (512 - 4)/sizeof(data_t);
@@ -205,7 +206,7 @@ void binaryToCsv() {
   binFile.rewind();
   // Create a new csvFile.
   strcpy(csvName, binName);
-  strcpy(&csvName[BASE_NAME_SIZE + 4], "csv");
+  strcpy(&csvName[BASE_NAME_SIZE + 5], "csv");
 
   if (!csvFile.open(csvName, O_WRITE | O_CREAT | O_TRUNC)) {
     error("open csvFile failed");
@@ -335,25 +336,33 @@ void logData() {
   SerialUSB.println();
 
   // Find unused file name.
-  // Max file number is 999, after that you should delete older files by hand
-  // Test code: https://repl.it/@oliveirafhm/GrumpyGrowingLoop
+  // Max file number is 9999, after that you should delete older files by hand
+  // Test code: https://repl.it/@oliveirafhm/AutoFileNameArduino
   if (BASE_NAME_SIZE > 6) {
     error("FILE_BASE_NAME too long");
   }
   while (sd.exists(binName)) {
-    if (binName[BASE_NAME_SIZE + 2] != '9') {
-      binName[BASE_NAME_SIZE + 2]++;
-    } else if (binName[BASE_NAME_SIZE + 1] != '9') {
-      binName[BASE_NAME_SIZE + 1]++;
-      binName[BASE_NAME_SIZE + 2] = '0';
-    } else {
-      binName[BASE_NAME_SIZE + 1] = '0';
-      binName[BASE_NAME_SIZE + 2] = '0';
-      if (binName[BASE_NAME_SIZE] == '9') {
-        error("Can't create file name");
-      }
-      binName[BASE_NAME_SIZE]++;
-    }
+    // if (binName[BASE_NAME_SIZE + 2] != '9') {
+    //   binName[BASE_NAME_SIZE + 2]++;
+    // } else if (binName[BASE_NAME_SIZE + 1] != '9') {
+    //   binName[BASE_NAME_SIZE + 1]++;
+    //   binName[BASE_NAME_SIZE + 2] = '0';
+    // } else {
+    //   binName[BASE_NAME_SIZE + 1] = '0';
+    //   binName[BASE_NAME_SIZE + 2] = '0';
+    //   if (binName[BASE_NAME_SIZE] == '9') {
+    //     error("Can't create file name");
+    //   }
+    //   binName[BASE_NAME_SIZE]++;
+    // }
+    char number_as_string[4];
+    strncpy(number_as_string, binName + BASE_NAME_SIZE, 4);
+    // int current_file_number = atoi(number_as_string);
+
+    int new_file_number = atoi(number_as_string) + 1;
+    if(new_file_number > 9999) error("Can't create file name");
+
+    snprintf(binName, sizeof(binName),"%s%04d.bin", FILE_BASE_NAME, new_file_number);
   }
   // Delete old tmp file.
   if (sd.exists(TMP_FILE_NAME)) {
@@ -564,7 +573,10 @@ void logData() {
   binaryToCsvFlag = true;
 }
 //------------------------------------------------------------------------------
-void setup(void) {
+void setup() {
+  // Soft reset (to enable the use of native port in the right way)
+  // RSTC->RSTC_CR = 0xA5000005;
+  //
   if (ERROR_LED_PIN >= 0) {
     pinMode(ERROR_LED_PIN, OUTPUT);
     digitalWrite(ERROR_LED_PIN, LOW);
@@ -671,7 +683,7 @@ void setup(void) {
 // #define AIRCR          (*(uint32_t*)0xe000ed0cUL) // fixed arch-defined address
 // #define REQUEST_EXTERNAL_RESET (AIRCR=(AIRCR&VECTKEY_MASK)|VECTKEY|SYSRESETREQ)
 //------------------------------------------------------------------------------
-void loop(void) {
+void loop() {
   // discard any input
   while (SerialUSB.read() >= 0) {}
   if(binaryToCsvFlag){
