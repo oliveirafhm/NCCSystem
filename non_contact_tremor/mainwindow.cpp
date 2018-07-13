@@ -205,7 +205,7 @@ void MainWindow::stopDataHandler(char *data){
 
 void MainWindow::saveDataCollection()
 {
-    showStatusMessage(tr("Saving... (wait while the file is saved)"), StatusFlag::Saving);
+    showStatusMessage(tr("Saving... (wait while the file is saved)."), StatusFlag::Saving);
     QByteArray ba = "d";
     writeData(ba);
     ui->actionSave->setEnabled(false);
