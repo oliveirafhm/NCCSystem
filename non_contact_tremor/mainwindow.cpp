@@ -73,6 +73,10 @@ void MainWindow::openSerialPort()
     serial->setFlowControl(p.flowControl);
     if (serial->open(QIODevice::ReadWrite)) {
         serial->clear();
+        // DTR signal (flag to enable serial communication work on win + nativeport)
+        // Ref.: https://stackoverflow.com/questions/23198241/unable-to-communicate-with-arduino-using-qserialport-if-the-arduino-ide-has-not#
+        serial->setDataTerminalReady(true);
+        //
         ui->actionConnect->setEnabled(false);
         ui->actionDisconnect->setEnabled(true);
         ui->actionConfigure->setEnabled(false);
@@ -213,12 +217,12 @@ void MainWindow::saveDataCollection()
     ui->actionStart->setEnabled(false);
     // Create file and open it to write
     TrialSetup::TrialSetupConfig ts = trialSetup->trialSetupConfig();
-    fullFileName = ts.directoryPath + ts.directoryPath.data()[0] + ts.fileName + ".csv";
+    fullFileName = ts.directoryPath + QDir::separator() + ts.fileName + ".csv";
     // Rename file name if need it to avoid override
     qint8 nFile = -1;
     while (QFile::exists(fullFileName)){
         nFile ++;
-        fullFileName = ts.directoryPath + ts.directoryPath.data()[0] + ts.fileName + QString::number(nFile) + ".csv";
+        fullFileName = ts.directoryPath + QDir::separator() + ts.fileName + QString::number(nFile) + ".csv";
     }
     //
     csvFile = new QFile(fullFileName);
@@ -236,10 +240,11 @@ void MainWindow::saveDataCollection()
         QString psFileName = serialMonitorText.mid(csvNameIndex - 6,10);
 
         *stream << QDateTime::currentDateTime().toString() << " |  "
-                << psFileName << " | " << "ADC: 12 bits";
+                << psFileName << " | " << "ADC: 12 bits & 3.3 volts";
 
         // Save log (serial output) -> filename+plessfilename.log
-        QFile log(fullFileName.mid(0,fullFileName.length()-4) + "_" + psFileName + ".log");
+        QFile log(fullFileName.mid(0,fullFileName.length()-4) + "_" +
+                  psFileName.mid(0,psFileName.length()-4) + ".log");
         if (log.open(QFile::WriteOnly | QFile::Text)){
             QTextStream out(&log);
             out << serialMonitorText;
@@ -256,7 +261,6 @@ void MainWindow::saveDataHandler(char *data)
     if (statusFlag == StatusFlag::Saving){
         if (!QString(data).contains("Done", Qt::CaseInsensitive) && !QString(data).contains("Type", Qt::CaseInsensitive)){
             *stream << data;
-
         } else if (QString(data).contains("Done", Qt::CaseInsensitive)) {
             ui->actionStart->setEnabled(true);
             ui->actionDisconnect->setEnabled(true);

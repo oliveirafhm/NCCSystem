@@ -599,9 +599,10 @@ void setup() {
     pinMode(digitalInPinList[i], INPUT);
   }
   // SerialUSB.begin(115200);
-  SerialUSB.begin(921600);
+  //SerialUSB.begin(921600);
+  SerialUSB.begin(2000000);
   // UART->UART_BRGR = 7;
-  // Serial.begin(230400);// Test 614400
+  // Serial.begin(230400);
   while (!SerialUSB) {}
   SerialUSB.println(F("Ready"));
   // .println(F("Initial setup\n"));
