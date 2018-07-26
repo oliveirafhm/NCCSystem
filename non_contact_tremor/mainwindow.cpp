@@ -208,15 +208,19 @@ void MainWindow::stopDataHandler(char *data){
 }
 
 void MainWindow::saveDataCollection()
-{
-    showStatusMessage(tr("Saving... (wait while the file is saved)."), StatusFlag::Saving);
-    QByteArray ba = "d";
-    writeData(ba);
+{    
+    TrialSetup::TrialSetupConfig ts = trialSetup->trialSetupConfig();
+    if (!ts.justLog){
+        showStatusMessage(tr("Saving... (wait while the file is saved)."), StatusFlag::Saving);
+        QByteArray ba = "d";
+        writeData(ba);
+    } else
+        showStatusMessage(tr("Log saving..."), StatusFlag::LogSaving);
+
     ui->actionSave->setEnabled(false);
     ui->actionDisconnect->setEnabled(false);
     ui->actionStart->setEnabled(false);
-    // Create file and open it to write
-    TrialSetup::TrialSetupConfig ts = trialSetup->trialSetupConfig();
+    // Create file and open it to write    
     fullFileName = ts.directoryPath + QDir::separator() + ts.fileName + ".csv";
     // Rename file name if need it to avoid override
     qint8 nFile = -1;
@@ -224,36 +228,40 @@ void MainWindow::saveDataCollection()
         nFile ++;
         fullFileName = ts.directoryPath + QDir::separator() + ts.fileName + QString::number(nFile) + ".csv";
     }
-    //
-    csvFile = new QFile(fullFileName);
-    if (csvFile->open(QFile::WriteOnly | QFile::Text)){
-        stream = new QTextStream(csvFile);
-        // Create header file
-        // Date and time | Plesse csv file name | ADC resolution
-        serialMonitorText = ui->serialMonitorTextEdit->toPlainText();
-        qint16 csvNameIndex;
-        if (serialMonitorText.count(".csv") > 1)
-            csvNameIndex = serialMonitorText.lastIndexOf(".csv");
-        else
-            csvNameIndex = serialMonitorText.indexOf(".csv");
+    // Create header file
+    // Date and time | Plesse csv file name | ADC resolution
+    serialMonitorText = ui->serialMonitorTextEdit->toPlainText();
+    qint16 csvNameIndex;
+    if (serialMonitorText.count(".csv") > 1)
+        csvNameIndex = serialMonitorText.lastIndexOf(".csv");
+    else
+        csvNameIndex = serialMonitorText.indexOf(".csv");
 
-        QString psFileName = serialMonitorText.mid(csvNameIndex - 6,10);
+    QString psFileName = serialMonitorText.mid(csvNameIndex - 6,10);
 
-        *stream << QDateTime::currentDateTime().toString() << " |  "
-                << psFileName << " | " << "ADC: 12 bits & 3.3 volts";
-
-        // Save log (serial output) -> filename+plessfilename.log
-        QFile log(fullFileName.mid(0,fullFileName.length()-4) + "_" +
-                  psFileName.mid(0,psFileName.length()-4) + ".log");
-        if (log.open(QFile::WriteOnly | QFile::Text)){
-            QTextStream out(&log);
-            out << serialMonitorText;
-            log.flush();
-            log.close();
+    if (!ts.justLog){
+        csvFile = new QFile(fullFileName);
+        if (csvFile->open(QFile::WriteOnly | QFile::Text)){
+            stream = new QTextStream(csvFile);
+            *stream << QDateTime::currentDateTime().toString() << " |  "
+                    << psFileName << " | " << "ADC: 12 bits & 3.3 volts";
         } else
-            showStatusMessage(tr("Log file opening error! Check file path and filename."), StatusFlag::Unknown);
+            showStatusMessage(tr("CSV file opening error! Check file path and filename."), StatusFlag::Unknown);
+    }
+
+    // Save log (serial output) -> filename+plessfilename.log
+    QFile log(fullFileName.mid(0,fullFileName.length()-4) + "_" +
+              psFileName.mid(0,psFileName.length()-4) + ".log");
+    if (log.open(QFile::WriteOnly | QFile::Text)){
+        QTextStream out(&log);
+        out << serialMonitorText;
+        log.flush();
+        log.close();
     } else
-        showStatusMessage(tr("CSV file opening error! Check file path and filename."), StatusFlag::Unknown);
+        showStatusMessage(tr("Log file opening error! Check file path and filename."), StatusFlag::Unknown);
+
+    if(ts.justLog)
+        saveDataFinished();
 }
 
 void MainWindow::saveDataHandler(char *data)
@@ -261,19 +269,24 @@ void MainWindow::saveDataHandler(char *data)
     if (statusFlag == StatusFlag::Saving){
         if (!QString(data).contains("Done", Qt::CaseInsensitive) && !QString(data).contains("Type", Qt::CaseInsensitive)){
             *stream << data;
-        } else if (QString(data).contains("Done", Qt::CaseInsensitive)) {
-            ui->actionStart->setEnabled(true);
-            ui->actionDisconnect->setEnabled(true);
-            ui->actionPlotSignals->setEnabled(true);
-            showStatusMessage(tr("Data saved successfully!"), StatusFlag::Saved);
-            appendTextSerialMonitor("\n--------------------------------\n");
+        } else if (QString(data).contains("Done", Qt::CaseInsensitive)) {            
             // Flush and close file
             csvFile->flush();
             csvFile->close();
-            serialMonitorText.clear();
-//            qDebug() << data;
+            saveDataFinished();
         }
     }
+}
+
+void MainWindow::saveDataFinished()
+{
+    ui->actionStart->setEnabled(true);
+    ui->actionDisconnect->setEnabled(true);
+    if (statusFlag == StatusFlag::Saving)
+        ui->actionPlotSignals->setEnabled(true);
+    showStatusMessage(tr("Data saved successfully!"), StatusFlag::Saved);
+    appendTextSerialMonitor("\n--------------------------------\n");
+    serialMonitorText.clear();
 }
 
 void MainWindow::appendTextSerialMonitor(const QString &text)

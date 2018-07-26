@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>900</width>
-    <height>700</height>
+    <height>650</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Non contact sensor data logger 1.0</string>
+   <string>Non contact sensor data logger v1.1</string>
   </property>
   <property name="windowIcon">
    <iconset resource="non_contact_tremor.qrc">
@@ -29,7 +29,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>12</pointsize>
        </font>
       </property>
       <property name="title">
@@ -40,7 +40,7 @@
         <widget class="QPlainTextEdit" name="serialMonitorTextEdit">
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="undoRedoEnabled">
@@ -76,7 +76,7 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="title">
@@ -103,7 +103,7 @@
          </property>
          <property name="font">
           <font>
-           <pointsize>14</pointsize>
+           <pointsize>12</pointsize>
           </font>
          </property>
          <property name="title">
@@ -131,7 +131,7 @@
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCalls">
@@ -169,6 +169,11 @@
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="autoFillBackground">
     <bool>false</bool>
    </property>
@@ -200,7 +205,7 @@
   <widget class="QStatusBar" name="statusBar">
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>12</pointsize>
     </font>
    </property>
   </widget>
@@ -217,7 +222,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
   </action>
@@ -234,7 +239,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
   </action>
@@ -251,7 +256,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
   </action>
@@ -265,7 +270,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
    <property name="shortcut">
@@ -288,7 +293,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
   </action>
@@ -305,11 +310,14 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
   </action>
   <action name="actionClear">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="non_contact_tremor.qrc">
      <normaloff>:/images/trash.png</normaloff>:/images/trash.png</iconset>
@@ -322,7 +330,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
   </action>
@@ -335,7 +343,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
   </action>
@@ -345,7 +353,7 @@
    </property>
    <property name="font">
     <font>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
     </font>
    </property>
   </action>
@@ -394,6 +402,11 @@
    <property name="toolTip">
     <string>Save data in this PC</string>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionPlotSignals">
    <property name="icon">
@@ -405,6 +418,11 @@
    </property>
    <property name="toolTip">
     <string>Plot the recorded signals</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </action>
  </widget>

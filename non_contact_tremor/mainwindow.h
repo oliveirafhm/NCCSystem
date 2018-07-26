@@ -30,10 +30,11 @@ public:
         Recording = 3,
         Stopped = 4,
         ConversionDone = 5,
-        Saving = 6,
-        Saved = 7,
-        Plotting = 8,
-        Plotted = 9,
+        LogSaving = 6,
+        Saving = 7,
+        Saved = 8,
+        Plotting = 9,
+        Plotted = 10,
         Unknown = -1
     };
     Q_ENUM(StatusFlag)
@@ -64,6 +65,7 @@ private:
     void changeIconStatus(qint8 iStatus);
     void stopDataHandler(char *data);
     void saveDataHandler(char *data);
+    void saveDataFinished();
     void appendTextSerialMonitor(const QString &text);
 
     Ui::MainWindow *ui;

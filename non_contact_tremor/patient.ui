@@ -10,6 +10,11 @@
     <height>180</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Patient data</string>
   </property>

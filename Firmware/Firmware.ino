@@ -1,6 +1,6 @@
 /**
  * Edited by Fábio Henrique (oliveirafhm@gmail.com) - 22/01/2016
- * Last modification: 24/06/2018
+ * Last modification: 26/07/2018
  *
  * This program logs data to a binary file.  Functions are included
  * to convert the binary file to a csv text file.
@@ -32,23 +32,6 @@ void acquireData(data_t* data) {
   for (int i = 0; i < DIGITAL_DIM; i++) {
     data->digital[i] = digitalRead(digitalInPinList[i]);
   }
-  // SerialUSB print -- Test --
-  // if (data->time >= lastTime+1000000){
-  //   unsigned long t1 = micros();
-  //   SerialUSB.print(data->time);
-  //   for (int i = 0; i < ADC_DIM; i++) {
-  //     SerialUSB.print(',');
-  //     SerialUSB.print(data->adc[i]);
-  //   }
-  //   for (int i = 0; i < DIGITAL_DIM; i++) {
-  //     SerialUSB.print(',');
-  //     SerialUSB.print(data->digital[i]);
-  //   }
-  //   SerialUSB.println();
-  //   SerialUSB.println(micros() - t1);
-  //   lastTime = data->time;
-  // }
-  //
 }
 
 // Print a data record.
@@ -100,6 +83,7 @@ const uint32_t FILE_BLOCK_COUNT = 256000;
 
 // log file base name.  Must be six characters or less.
 #define FILE_BASE_NAME "PS"
+#define BIN_NUMBER "0000"
 //------------------------------------------------------------------------------
 // Buffer definitions.
 //
@@ -139,7 +123,7 @@ SdFat sd;
 SdBaseFile binFile;
 
 // char binName[13] = FILE_BASE_NAME "000.bin";
-char binName[13] = FILE_BASE_NAME "0000.bin";
+char binName[13] = FILE_BASE_NAME BIN_NUMBER ".bin";
 
 // Number of data records in a block.
 const uint16_t DATA_DIM = (512 - 4)/sizeof(data_t);
@@ -337,32 +321,17 @@ void logData() {
 
   // Find unused file name.
   // Max file number is 9999, after that you should delete older files by hand
-  // Test code: https://repl.it/@oliveirafhm/AutoFileNameArduino
+  // Test code: https://repl.it/@oliveirafhm/AutoFileNameArduino-1
   if (BASE_NAME_SIZE > 6) {
     error("FILE_BASE_NAME too long");
   }
-  while (sd.exists(binName)) {
-    // if (binName[BASE_NAME_SIZE + 2] != '9') {
-    //   binName[BASE_NAME_SIZE + 2]++;
-    // } else if (binName[BASE_NAME_SIZE + 1] != '9') {
-    //   binName[BASE_NAME_SIZE + 1]++;
-    //   binName[BASE_NAME_SIZE + 2] = '0';
-    // } else {
-    //   binName[BASE_NAME_SIZE + 1] = '0';
-    //   binName[BASE_NAME_SIZE + 2] = '0';
-    //   if (binName[BASE_NAME_SIZE] == '9') {
-    //     error("Can't create file name");
-    //   }
-    //   binName[BASE_NAME_SIZE]++;
-    // }
-    char number_as_string[4];
-    strncpy(number_as_string, binName + BASE_NAME_SIZE, 4);
-    // int current_file_number = atoi(number_as_string);
+  int current_file_number = atoi(BIN_NUMBER);
+  while (sd.exists(binName)) {    
+    current_file_number = current_file_number + 1;
+    //SerialUSB.println(current_file_number);//Test    
+    if(current_file_number > 9999) error("Can't create file name");
 
-    int new_file_number = atoi(number_as_string) + 1;
-    if(new_file_number > 9999) error("Can't create file name");
-
-    snprintf(binName, sizeof(binName),"%s%04d.bin", FILE_BASE_NAME, new_file_number);
+    snprintf(binName, sizeof(binName),"%s%04d.bin", FILE_BASE_NAME, current_file_number);
   }
   // Delete old tmp file.
   if (sd.exists(TMP_FILE_NAME)) {
