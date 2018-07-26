@@ -24,6 +24,7 @@ public:
         quint16 sampleRate = 3000;
         quint8 collectionTimeOut = 0;
         QString fileName = "defaultName";
+        bool justLog = true;
         QString directoryPath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
     };
 

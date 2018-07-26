@@ -185,6 +185,19 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="checkBoxLogFile">
+        <property name="toolTip">
+         <string>Checking this option the signals will only be saved in SD card.</string>
+        </property>
+        <property name="text">
+         <string>Just save log file (speed-up the saving process)</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

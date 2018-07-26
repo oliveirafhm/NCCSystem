@@ -27,7 +27,7 @@ void Plot::parseData(QTextStream &data)
     qint8 adcResolution = 12;
     float mcVoltage = 3.3;
     qint32 factor = qPow(2, adcResolution);
-    float initTime = -1;
+    double initTime = -1;
 
     while(!data.atEnd()){
         QString line = data.readLine();
@@ -37,8 +37,10 @@ void Plot::parseData(QTextStream &data)
             continue;
         //
         if(initTime == -1)
-            initTime = strList[0].toInt() / 1000000;
-        x.append(strList[0].toInt() / 1000000 - initTime);
+            initTime = strList[0].toInt() / 1000000.0;
+//        x.append(++initTime);//Test
+        x.append(strList[0].toInt() / 1000000.0 - initTime);
+//        qDebug() << strList[0].toInt() / 1000000.0 - initTime;
 //        x2.append(strList[0].toInt() / 1000000 - initTime);
         y1.append(strList[2].toInt() * mcVoltage / factor);
         y2.append(strList[3].toInt() * mcVoltage / factor);

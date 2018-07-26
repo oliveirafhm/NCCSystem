@@ -316,9 +316,9 @@ void MainWindow::plotHandler()
         ui->yAxisPlot->xAxis->setLabel("Time (s)");
         ui->yAxisPlot->yAxis->setLabel("V");
         // Set axes ranges
-//        ui->xAxisPlot->xAxis->setRange(0, 10);
+        ui->xAxisPlot->xAxis->setRange(0, plot->x[plot->x.length()-1]);
         ui->xAxisPlot->yAxis->setRange(0, 3.3);
-//        ui->yAxisPlot->xAxis->setRange(0, 10);
+        ui->yAxisPlot->xAxis->setRange(0, plot->x[plot->x.length()-1]);
         ui->yAxisPlot->yAxis->setRange(0, 3.3);
 
         ui->xAxisPlot->legend->setVisible(true);
@@ -328,12 +328,12 @@ void MainWindow::plotHandler()
         ui->xAxisPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
         ui->yAxisPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
         // Update UI component
-        ui->xAxisPlot->rescaleAxes();
-        ui->yAxisPlot->rescaleAxes();
+//        ui->xAxisPlot->rescaleAxes();
+//        ui->yAxisPlot->rescaleAxes();
         ui->xAxisPlot->replot();
         ui->yAxisPlot->replot();
-        ui->xAxisPlot->update();
-        ui->yAxisPlot->update();
+//        ui->xAxisPlot->update();
+//        ui->yAxisPlot->update();
 
         showStatusMessage(tr("Signals already plotted."), StatusFlag::Plotted);
     }

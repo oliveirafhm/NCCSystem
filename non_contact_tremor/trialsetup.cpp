@@ -62,6 +62,7 @@ void TrialSetup::updateTrialSetupConfig()
     currentTrialSetup.sampleRate = ui->sampleRateLineEdit->text().toInt();
     currentTrialSetup.collectionTimeOut = ui->collectionTimeoutLineEdit->text().toInt();
     currentTrialSetup.fileName = ui->fileNameEdit->text();
+    currentTrialSetup.justLog = ui->checkBoxLogFile->isChecked();
     currentTrialSetup.directoryPath = ui->directoryPathLineEdit->text();
 }
 
