@@ -17,5 +17,7 @@
         <file>images/rec_yellow.png</file>
         <file>images/save-file-option.png</file>
         <file>images/signal.png</file>
+        <file>images/musical-note.png</file>
+        <file>audio/experiment_beeps.mp3</file>
     </qresource>
 </RCC>

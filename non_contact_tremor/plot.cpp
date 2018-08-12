@@ -33,15 +33,12 @@ void Plot::parseData(QTextStream &data)
         QString line = data.readLine();
         QStringList strList = line.split(',');
         // Filter out header and overruns
-        if(strList[0].toInt() == 0)
+        if (strList[0].toInt() == 0)
             continue;
         //
-        if(initTime == -1)
+        if (initTime == -1)
             initTime = strList[0].toInt() / 1000000.0;
-//        x.append(++initTime);//Test
         x.append(strList[0].toInt() / 1000000.0 - initTime);
-//        qDebug() << strList[0].toInt() / 1000000.0 - initTime;
-//        x2.append(strList[0].toInt() / 1000000 - initTime);
         y1.append(strList[2].toInt() * mcVoltage / factor);
         y2.append(strList[3].toInt() * mcVoltage / factor);
 
@@ -50,13 +47,11 @@ void Plot::parseData(QTextStream &data)
         digitalInA.append(strList[5].toInt());
         digitalInB.append(strList[6].toInt());
     }
-//    qDebug() << x.length() << endl << y1.length() << endl << y2.length() << endl;
 }
 
 void Plot::clearData()
 {
     x.clear();
-//    x2.clear();
     y1.clear();
     y2.clear();
     batteryStatus.clear();

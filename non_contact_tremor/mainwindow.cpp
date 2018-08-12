@@ -9,6 +9,7 @@
 #include <QSerialPort>
 #include <QDebug>
 #include <QTimer>
+#include <QMediaPlayer>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,7 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionStart->setEnabled(false);
     ui->actionStop->setEnabled(false);
     ui->actionSave->setEnabled(false);
-    ui->actionPlotSignals->setEnabled(false);
+    ui->actionPlotSignals->setEnabled(true);
+    ui->actionPlayBeeps->setEnabled(false);
 
     qint8 iconStatusHeight = ui->statusBar->height()/1.2;
     pixmapS0 = new QPixmap(QPixmap(":/images/rec_neutral.png").scaledToHeight(iconStatusHeight));
@@ -112,7 +114,7 @@ void MainWindow::closeSerialPort()
     ui->actionConfigure->setEnabled(true);
     ui->actionStart->setEnabled(false);
     ui->actionStop->setEnabled(false);
-    ui->actionPlotSignals->setEnabled(false);
+//    ui->actionPlotSignals->setEnabled(false);
     ui->actionTrialSetup->setEnabled(true);
     changeIconStatus(1);
     ui->serialMonitorTextEdit->clear();
@@ -125,7 +127,8 @@ void MainWindow::about()
                        tr("Non contact sensor data logger is a software to record "
                           "and plot signals from non-contact capacitive sensors (PS25454). "
                           "There is a specific firmware to use along with this software. "
-                          "Check it with the author: Fábio Henrique (oliveirafhm@gmail.com)"));
+                          "Check it with the author: Fábio Henrique (oliveirafhm@gmail.com). "
+                          "All icons are from www.flaticon.com"));
 }
 
 qint64 MainWindow::writeData(const QByteArray &data)
@@ -181,6 +184,7 @@ void MainWindow::startDataCollection()
     ui->actionStop->setEnabled(true);
     ui->actionDisconnect->setEnabled(false);
     ui->actionPlotSignals->setEnabled(false);
+    ui->actionPlayBeeps->setEnabled(true);
     changeIconStatus(3);
     // Clear graph ui component
     ui->xAxisPlot->clearGraphs();
@@ -189,13 +193,26 @@ void MainWindow::startDataCollection()
     ui->yAxisPlot->replot();
 }
 
+void MainWindow::playBeeps()
+{
+    ui->actionPlayBeeps->setEnabled(false);
+    // Play..
+    player = new QMediaPlayer;
+    player->setMedia(QUrl("qrc:/audio/experiment_beeps.mp3"));
+    player->setVolume(100);
+    player->play();
+}
+
 void MainWindow::stopDataCollection()
 {
-    showStatusMessage(tr("Stopped (wait while the file conversion occurs)"), StatusFlag::Stopped);
+    showStatusMessage(tr("Stopped (wait while the file conversion occurs)."), StatusFlag::Stopped);
     QByteArray ba = "2";
     writeData(ba);
     ui->actionStop->setEnabled(false);
     changeIconStatus(2);
+    // Also stop audio beeps
+    ui->actionPlayBeeps->setEnabled(false);
+    player->stop();
 }
 
 void MainWindow::stopDataHandler(char *data){
@@ -228,9 +245,25 @@ void MainWindow::saveDataCollection()
         nFile ++;
         fullFileName = ts.directoryPath + QDir::separator() + ts.fileName + QString::number(nFile) + ".csv";
     }
-    // Create header file
     // Date and time | Plesse csv file name | ADC resolution
     serialMonitorText = ui->serialMonitorTextEdit->toPlainText();
+    // Get sample count from terminal output to calc file saving percentage
+    qint16 sampleCountIndex;
+    if (serialMonitorText.count("Sample count:") > 1)
+        sampleCountIndex = serialMonitorText.lastIndexOf("Sample count:");
+    else
+        sampleCountIndex = serialMonitorText.indexOf("Sample count:");
+    sampleCountIndex += QString("Sample count:").length()+1;
+    QString s = serialMonitorText.at(sampleCountIndex);
+    QString sampleCountString;
+    while(s != "\n"){
+        sampleCountString += s;
+        sampleCountIndex++;
+        s = serialMonitorText.at(sampleCountIndex);
+    }
+    sampleCount = sampleCountString.toInt();
+//    qDebug() << sampleCountString;
+    // Create header file
     qint16 csvNameIndex;
     if (serialMonitorText.count(".csv") > 1)
         csvNameIndex = serialMonitorText.lastIndexOf(".csv");
@@ -247,6 +280,7 @@ void MainWindow::saveDataCollection()
                     << psFileName << " | " << "ADC: 12 bits & 3.3 volts";
         } else
             showStatusMessage(tr("CSV file opening error! Check file path and filename."), StatusFlag::Unknown);
+//        QTimer::singleShot(1000*30,this,SLOT(updateSaveFeedback()));
     }
 
     // Save log (serial output) -> filename+plessfilename.log
@@ -269,10 +303,17 @@ void MainWindow::saveDataHandler(char *data)
     if (statusFlag == StatusFlag::Saving){
         if (!QString(data).contains("Done", Qt::CaseInsensitive) && !QString(data).contains("Type", Qt::CaseInsensitive)){
             *stream << data;
+            // Var used to calc percentage of file saving
+            nSampleCount++;
+            // Each 36000 samples updates percentage ui feedback
+            if (nSampleCount % 36000 == 0){
+                float p = nSampleCount / float(sampleCount) * 100.0;
+                showStatusMessage("Saving... ("+QString::number(p, 'f', 2)+"%).", StatusFlag::Saving);
+            }
         } else if (QString(data).contains("Done", Qt::CaseInsensitive)) {            
             // Flush and close file
             csvFile->flush();
-            csvFile->close();
+            csvFile->close();            
             saveDataFinished();
         }
     }
@@ -282,9 +323,12 @@ void MainWindow::saveDataFinished()
 {
     ui->actionStart->setEnabled(true);
     ui->actionDisconnect->setEnabled(true);
-    if (statusFlag == StatusFlag::Saving)
+    if (statusFlag == StatusFlag::Saving){
         ui->actionPlotSignals->setEnabled(true);
-    showStatusMessage(tr("Data saved successfully!"), StatusFlag::Saved);
+        nSampleCount = 0;
+        showStatusMessage(tr("Data saved successfully!"), StatusFlag::Saved);
+    } else
+        showStatusMessage(tr("Log saved successfully!"), StatusFlag::LogSaved);
     appendTextSerialMonitor("\n--------------------------------\n");
     serialMonitorText.clear();
 }
@@ -298,12 +342,23 @@ void MainWindow::appendTextSerialMonitor(const QString &text)
 
 void MainWindow::plotSignals()
 {
+    // Load external file (option to plot past signals)
+    if (statusFlag != StatusFlag::Saved){
+        fullFileName = QFileDialog::getOpenFileName(this,
+                        tr("Open CSV file"), "/", tr("CSV Files (*.csv)"));
+    }
     showStatusMessage(tr("Plotting..."), StatusFlag::Plotting);
-    ui->actionPlotSignals->setEnabled(false);
+//    ui->actionPlotSignals->setEnabled(false);
     QTimer::singleShot(100,this,SLOT(plotHandler()));
 }
 void MainWindow::plotHandler()
 {
+    // Clear graph ui component
+    ui->xAxisPlot->clearGraphs();
+    ui->yAxisPlot->clearGraphs();
+    ui->xAxisPlot->replot();
+    ui->yAxisPlot->replot();
+    // New plot
     plot = new Plot;
     bool loadStatus = plot->loadData(fullFileName);
     if (loadStatus){
@@ -369,6 +424,7 @@ void MainWindow::initActionsConnections()
     connect(ui->actionTrialSetup, SIGNAL(triggered()), trialSetup, SLOT(show()));
     connect(ui->actionPatient, SIGNAL(triggered()), patient, SLOT(show()));
     connect(ui->actionStart, SIGNAL(triggered()), this, SLOT(startDataCollection()));
+    connect(ui->actionPlayBeeps, SIGNAL(triggered()), this, SLOT(playBeeps()));
     connect(ui->actionStop, SIGNAL(triggered()), this, SLOT(stopDataCollection()));
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(saveDataCollection()));
     connect(ui->actionPlotSignals, SIGNAL(triggered()), this, SLOT(plotSignals()));

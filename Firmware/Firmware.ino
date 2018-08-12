@@ -163,6 +163,7 @@ void errorFlash(const __FlashStringHelper* msg) {
 //------------------------------------------------------------------------------
 //
 void fatalBlink() {
+  SerialUSB.println(F("Fatal Blink!"));
   while (true) {
     if (ERROR_LED_PIN >= 0) {
       digitalWrite(ERROR_LED_PIN, HIGH);
@@ -326,9 +327,9 @@ void logData() {
     error("FILE_BASE_NAME too long");
   }
   int current_file_number = atoi(BIN_NUMBER);
-  while (sd.exists(binName)) {    
+  while (sd.exists(binName)) {
     current_file_number = current_file_number + 1;
-    //SerialUSB.println(current_file_number);//Test    
+    //SerialUSB.println(current_file_number);//Test
     if(current_file_number > 9999) error("Can't create file name");
 
     snprintf(binName, sizeof(binName),"%s%04d.bin", FILE_BASE_NAME, current_file_number);

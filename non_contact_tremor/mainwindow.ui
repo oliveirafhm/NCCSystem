@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Non contact sensor data logger v1.1</string>
+   <string>Non contact sensor data logger v1.2</string>
   </property>
   <property name="windowIcon">
    <iconset resource="non_contact_tremor.qrc">
@@ -131,7 +131,7 @@
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCalls">
@@ -140,6 +140,8 @@
     </property>
     <addaction name="actionConnect"/>
     <addaction name="actionDisconnect"/>
+    <addaction name="separator"/>
+    <addaction name="actionPlayBeeps"/>
     <addaction name="separator"/>
     <addaction name="actionSave"/>
     <addaction name="actionPlotSignals"/>
@@ -169,6 +171,9 @@
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="font">
     <font>
      <pointsize>10</pointsize>
@@ -197,10 +202,12 @@
    <addaction name="actionConfigure"/>
    <addaction name="separator"/>
    <addaction name="actionStart"/>
+   <addaction name="actionPlayBeeps"/>
    <addaction name="actionStop"/>
    <addaction name="separator"/>
    <addaction name="actionSave"/>
    <addaction name="actionPlotSignals"/>
+   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar">
    <property name="font">
@@ -303,7 +310,7 @@
      <normaloff>:/images/system-controller.png</normaloff>:/images/system-controller.png</iconset>
    </property>
    <property name="text">
-    <string>Trial Setup</string>
+    <string>Trial setup</string>
    </property>
    <property name="toolTip">
     <string>Trial setup</string>
@@ -418,6 +425,26 @@
    </property>
    <property name="toolTip">
     <string>Plot the recorded signals</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionPlayBeeps">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="non_contact_tremor.qrc">
+     <normaloff>:/images/musical-note.png</normaloff>:/images/musical-note.png</iconset>
+   </property>
+   <property name="text">
+    <string>Play beeps</string>
+   </property>
+   <property name="toolTip">
+    <string>Play the audio beeps (to guide the volunteer) </string>
    </property>
    <property name="font">
     <font>

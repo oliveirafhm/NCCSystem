@@ -7,6 +7,7 @@
 #include <QMainWindow>
 #include <QSerialPort>
 #include <QTextStream>
+#include <QMediaPlayer>
 
 class QLabel;
 
@@ -32,9 +33,10 @@ public:
         ConversionDone = 5,
         LogSaving = 6,
         Saving = 7,
-        Saved = 8,
-        Plotting = 9,
-        Plotted = 10,
+        LogSaved = 8,
+        Saved = 9,
+        Plotting = 10,
+        Plotted = 11,
         Unknown = -1
     };
     Q_ENUM(StatusFlag)
@@ -53,6 +55,7 @@ private slots:
     qint64 writeData();
     void initialFirmwareSetup();
     void startDataCollection();
+    void playBeeps();
     void stopDataCollection();
     void saveDataCollection();
     void plotSignals();
@@ -85,7 +88,10 @@ private:
     QFile *csvFile;
     QTextStream *stream;
     QString serialMonitorText;
+    qint32 sampleCount = 0;
+    qint32 nSampleCount = 0;
     Plot *plot;
+    QMediaPlayer *player;
 };
 
 #endif // MAINWINDOW_H
