@@ -197,6 +197,8 @@ void MainWindow::playBeeps()
 {
     ui->actionPlayBeeps->setEnabled(false);
     // Play..
+    // How to solve media player bug on Windows (release):
+    // https://forum.qt.io/topic/28620/solved-qtmultimedia-defaultserviceprovider-requestservice-no-service-found-for-org-qt-project-qt-mediaplayer/9
     player = new QMediaPlayer;
     player->setMedia(QUrl("qrc:/audio/experiment_beeps.mp3"));
     player->setVolume(100);
@@ -213,6 +215,9 @@ void MainWindow::stopDataCollection()
     // Also stop audio beeps
     ui->actionPlayBeeps->setEnabled(false);
     player->stop();
+    // Destroy the pointer
+    delete player;
+    player = NULL;
 }
 
 void MainWindow::stopDataHandler(char *data){
@@ -306,14 +311,20 @@ void MainWindow::saveDataHandler(char *data)
             // Var used to calc percentage of file saving
             nSampleCount++;
             // Each 36000 samples updates percentage ui feedback
-            if (nSampleCount % 36000 == 0){
+            if (nSampleCount % 26000 == 0){
                 float p = nSampleCount / float(sampleCount) * 100.0;
                 showStatusMessage("Saving... ("+QString::number(p, 'f', 2)+"%).", StatusFlag::Saving);
             }
         } else if (QString(data).contains("Done", Qt::CaseInsensitive)) {            
             // Flush and close file
             csvFile->flush();
-            csvFile->close();            
+            csvFile->close();
+            // Destroy the pointer
+            delete csvFile;
+            csvFile = NULL;
+            delete stream;
+            stream = NULL;
+            //
             saveDataFinished();
         }
     }
@@ -405,6 +416,9 @@ void MainWindow::plotHandler()
 
         showStatusMessage(tr("Signals already plotted."), StatusFlag::Plotted);
     }
+    // Destroy the pointer
+    delete plot;
+    plot = NULL;
 }
 
 void MainWindow::handleError(QSerialPort::SerialPortError error)
