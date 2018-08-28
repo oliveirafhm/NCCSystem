@@ -29,14 +29,15 @@ public:
         Connected = 1,
         Disconnected = 2,
         Recording = 3,
-        Stopped = 4,
-        ConversionDone = 5,
-        LogSaving = 6,
-        Saving = 7,
-        LogSaved = 8,
-        Saved = 9,
-        Plotting = 10,
-        Plotted = 11,
+        Playing = 4,
+        Stopped = 5,
+        ConversionDone = 6,
+        LogSaving = 7,
+        Saving = 8,
+        LogSaved = 9,
+        Saved = 10,
+        Plotting = 11,
+        Plotted = 12,
         Unknown = -1
     };
     Q_ENUM(StatusFlag)
@@ -55,6 +56,7 @@ private slots:
     qint64 writeData();
     void initialFirmwareSetup();
     void startDataCollection();
+    void posStart();
     void playBeeps();
     void stopDataCollection();
     void saveDataCollection();

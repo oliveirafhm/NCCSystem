@@ -178,14 +178,12 @@ void MainWindow::startDataCollection()
     // Start data collection after 1.5s
     *_ba = "1";
     QTimer::singleShot(1500,this,SLOT(writeData()));
+    QTimer::singleShot(1450,this,SLOT(posStart()));
     //
     ui->actionSave->setEnabled(false);
     ui->actionStart->setEnabled(false);
-    ui->actionStop->setEnabled(true);
     ui->actionDisconnect->setEnabled(false);
     ui->actionPlotSignals->setEnabled(false);
-    ui->actionPlayBeeps->setEnabled(true);
-    changeIconStatus(3);
     // Clear graph ui component
     ui->xAxisPlot->clearGraphs();
     ui->yAxisPlot->clearGraphs();
@@ -193,8 +191,16 @@ void MainWindow::startDataCollection()
     ui->yAxisPlot->replot();
 }
 
+void MainWindow::posStart()
+{
+    ui->actionStop->setEnabled(true);
+    ui->actionPlayBeeps->setEnabled(true);
+    changeIconStatus(3);
+}
+
 void MainWindow::playBeeps()
 {
+    showStatusMessage(tr("Playing beeps..."), StatusFlag::Playing);
     ui->actionPlayBeeps->setEnabled(false);
     // Play..
     // How to solve media player bug on Windows (release):
@@ -207,17 +213,19 @@ void MainWindow::playBeeps()
 
 void MainWindow::stopDataCollection()
 {
+    // Stop audio beeps
+    if (statusFlag == StatusFlag::Playing){
+        //    ui->actionPlayBeeps->setEnabled(false);
+        player->stop();
+        // Destroy the pointer
+        delete player;
+        player = NULL;
+    }
     showStatusMessage(tr("Stopped (wait while the file conversion occurs)."), StatusFlag::Stopped);
     QByteArray ba = "2";
     writeData(ba);
     ui->actionStop->setEnabled(false);
     changeIconStatus(2);
-    // Also stop audio beeps
-    ui->actionPlayBeeps->setEnabled(false);
-    player->stop();
-    // Destroy the pointer
-    delete player;
-    player = NULL;
 }
 
 void MainWindow::stopDataHandler(char *data){
