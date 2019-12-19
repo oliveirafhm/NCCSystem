@@ -123,11 +123,11 @@ void MainWindow::closeSerialPort()
 
 void MainWindow::about()
 {
-    QMessageBox::about(this, tr("About Non contact sensor data logger"),
-                       tr("Non contact sensor data logger is a software to record "
+    QMessageBox::about(this, tr("About Non Contact System"),
+                       tr("Non Contact System is a software to record "
                           "and plot signals from non-contact capacitive sensors (PS25454). "
-                          "There is a specific firmware to use along with this software. "
-                          "Check it with the author: Fábio Henrique (oliveirafhm@gmail.com). "
+                          "There is a specific firmware and hardware to use along with this software. "
+                          "Check it with the author: Fábio Henrique (oliveirafhm.com). "
                           "All icons are from www.flaticon.com"));
 }
 
