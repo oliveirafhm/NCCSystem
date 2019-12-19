@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Non contact sensor data logger v1.2</string>
+   <string>Non Contact System v1.2.1</string>
   </property>
   <property name="windowIcon">
    <iconset resource="non_contact_tremor.qrc">
@@ -131,7 +131,7 @@
      <x>0</x>
      <y>0</y>
      <width>900</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCalls">
