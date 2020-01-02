@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>NCSystem</Name>
+    <Version>1.2.1</Version>
+    <Title>Non-contact system for human motion data collection</Title>
+    <Publisher>oliveirafhm.com</Publisher>
+    <ProductUrl>https://github.com/NIATS-UFU/NCCSystem</ProductUrl>
+    <InstallerWindowIcon>matrix-hand</InstallerWindowIcon>
+    <Logo>matrix-hand.png</Logo>
+    <TargetDir>@ApplicationsDir@/NCSystem</TargetDir>
+    <StartMenuDir>NCSystem</StartMenuDir>
+</Installer>

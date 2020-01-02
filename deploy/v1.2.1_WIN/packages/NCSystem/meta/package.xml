@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+  <DisplayName>NCSystem (base)</DisplayName>
+  <Description>Non Contact System is a software to record and plot signals from
+    non-contact capacitive sensors (PS25454). There is a specific firmware and
+    hardware to use along with this software.
+    Check it with the author: Fábio Henrique (oliveirafhm.com).</Description>
+  <Version>1.2.1</Version>
+  <ReleaseDate>2020-01-02</ReleaseDate>
+  <Name>NCSystem</Name>
+  <Default>true</Default>
+</Package>
