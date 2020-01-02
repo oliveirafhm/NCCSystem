@@ -8,9 +8,11 @@ QT       += core gui serialport multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
-TARGET = DataLogger
+TARGET = NCSystem
 TEMPLATE = app
 
+# https://wiki.qt.io/Build_Standalone_Qt_Application_for_Windows
+#CONFIG += static
 
 SOURCES += main.cpp\
         mainwindow.cpp \
