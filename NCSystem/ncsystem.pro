@@ -35,5 +35,4 @@ FORMS    += mainwindow.ui \
     patient.ui
 
 RESOURCES += \
-    non_contact_tremor.qrc
-
+    ncsystem.qrc
