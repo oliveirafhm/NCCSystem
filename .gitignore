@@ -1,9 +1,3 @@
 .DS_Store
-build-non_contact_tremor-Desktop_Qt_5_5_1_clang_64bit-Debug
-non_contact_tremor/non_contact_tremor.pro.*
-build-non_contact_tremor-Desktop_Qt_5_11_1_MinGW_32bit-Debug/
-build-non_contact_tremor-Desktop_Qt_5_11_1_MinGW_32bit-Release/
-build-non_contact_tremor-Desktop_Qt_5_11_0_clang_64bit-Debug/
-build-non_contact_tremor-Desktop_Qt_5_11_0_clang_64bit-Release/
-build-ncsystem-Desktop_Qt_5_11_1_MinGW_32bit-Release/
-build-ncsystem-Desktop_Qt_5_11_1_MinGW_32bit-Debug/
+build-ncsystem*
+ncsystem.pro.*
